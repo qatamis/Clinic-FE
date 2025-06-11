@@ -1,0 +1,123 @@
+<div class="row">
+  <div class="col-md-2"></div>
+  <div class="col-md-8">
+    <h4 class="p-2">Add Patient</h4>
+    <form
+      #form="ngForm"
+      class="shadow mx-auto p-5 rounded-2 mt-5"
+      (ngSubmit)="onSubmit()"
+    >
+      <input
+        type="text"
+        class="form-control border-1 w-100 my-3 p-2 px-4 rounded-2"
+        id="name"
+        name="name"
+        placeholder="Name"
+        [(ngModel)]="newPatient.name"
+      />
+      <input
+        type="text"
+        class="form-control border-1 w-100 my-3 p-2 px-4 rounded-2"
+        id="address"
+        name="adress"
+        placeholder="Address"
+        [(ngModel)]="newPatient.address"
+      />
+      <input
+        type="number"
+        class="form-control border-1 w-100 my-3 p-2 px-4 rounded-2"
+        id="age"
+        name="age"
+        placeholder="Age"
+        [(ngModel)]="newPatient.age"
+      />
+      <input
+        type="text"
+        class="form-control border-1 w-100 my-3 p-2 px-4 rounded-2"
+        id="phoneNumber"
+        name="phoneNumber"
+        placeholder="Phone Number"
+        [(ngModel)]="newPatient.phoneNumber"
+      />
+      <div class="row">
+        <div class="col-md-4">
+          <div class="input-group my-3 border-1">
+            <div class="input-group-text">
+              <input
+                class="form-check-input mt-0"
+                type="checkbox"
+                id="bloodSuger"
+                name="bloodSuger"
+                value=""
+                aria-label="Checkbox for following text input"
+                [(ngModel)]="newPatient.bloodSuger"
+              />
+            </div>
+            <label
+              type=""
+              class="form-control"
+              aria-label="Text input with checkbox"
+              >Blood Suger</label
+            >
+          </div>
+        </div>
+        <div class="col-md-4">
+          <div class="input-group my-3 border-1">
+            <div class="input-group-text">
+              <input
+                class="form-check-input mt-0"
+                type="checkbox"
+                id="bloodPressure"
+                name="bloodPressure"
+                value=""
+                aria-label="Checkbox for following text input"
+                [(ngModel)]="newPatient.bloodPressure"
+              />
+            </div>
+            <label
+              type=""
+              class="form-control"
+              aria-label="Text input with checkbox"
+              >Blood Pressure</label
+            >
+          </div>
+        </div>
+        <div class="col-md-4">
+          <div class="input-group my-3 border-1">
+            <div class="input-group-text">
+              <input
+                class="form-check-input mt-0"
+                type="checkbox"
+                id="allergy"
+                name="allergy"
+                value=""
+                aria-label="Checkbox for following text input"
+                [(ngModel)]="newPatient.allergy"
+              />
+            </div>
+            <label
+              type=""
+              class="form-control"
+              aria-label="Text input with checkbox"
+              >Allergy</label
+            >
+          </div>
+        </div>
+      </div>
+      <hr />
+      <div class="row">
+        <div class="col-md-6">
+          <button class="btn btn-outline-primary form-control">Save</button>
+        </div>
+        <div class="col-md-6">
+          <a
+            [routerLink]="'/patients'"
+            class="btn btn-outline-secondary form-control"
+            >Cancel</a
+          >
+        </div>
+      </div>
+    </form>
+  </div>
+  <div class="col-md-2"></div>
+</div>

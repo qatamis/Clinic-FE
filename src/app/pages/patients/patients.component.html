@@ -1,0 +1,153 @@
+<div class="row flex justify-between">
+  <div class="col"><h4 class="fw-bold p-3">All Patients</h4></div>
+  <!-- <h1 class="fw-bold p-3">All Patients</h1> -->
+  <div class="col d-flex flex-column align-items-end">
+    <a class="text-decoration-none" [routerLink]="'/patients/new'"
+      ><h5 class="fw-bold p-3">New Patient</h5></a
+    >
+  </div>
+</div>
+
+<div class="row">
+  <div class="col-12">
+    <input
+      #searchKeyword
+      (keyup)="searchByKeyword(searchKeyword.value)"
+      type="text"
+      class="border-1 w-100 my-3 p-2 px-4 rounded-2"
+      id="searchKeyword"
+      name="searchKeyword"
+      placeholder="Search for Patient"
+    />
+  </div>
+</div>
+
+<div class="container text-center">
+  <div class="row">
+    <div class="grid grid-cols-4">
+      @for (patient of (patients$ | async); track patient) {
+      <div class="card p-3 mb-3" style="width: 18rem">
+        <div class="text-center">
+          <div
+            class="rounded-full bg-blue-400 text-4xl w-24 h-24 inline-flex items-center justify-center font-bold text-white"
+          >
+            {{ patient.name[0] | uppercase }}
+          </div>
+          <div class="card-body fw-bold">
+            {{ patient.name }}
+          </div>
+        </div>
+        <mat-divider class="mb-3"></mat-divider>
+        <div
+          class="flex flex-row-reverse gap-2 justify-center items-center mb-2"
+        >
+          <p>{{ patient.address }}</p>
+          <mat-icon matPrefix>location_on</mat-icon>
+        </div>
+        <div
+          class="flex flex-row-reverse gap-2 justify-center items-center mb-2"
+        >
+          <p>{{ patient.age }}</p>
+          <mat-icon matPrefix>history</mat-icon>
+        </div>
+        <div
+          class="flex flex-row-reverse gap-2 justify-center items-center mb-2"
+        >
+          <p>{{ patient.phoneNumber }}</p>
+          <mat-icon matPrefix>phone_iphone</mat-icon>
+        </div>
+        <mat-divider class="mb-3"></mat-divider>
+        <div
+          class="flex flex-row-reverse gap-2 justify-center items-center mb-2"
+        >
+          @if(patient.bloodSuger){
+          <p>Blood Sugar: Yes</p>
+          }@else {
+          <p>Blood Sugar: No</p>
+          }
+        </div>
+        <div
+          class="flex flex-row-reverse gap-2 justify-center items-center mb-2"
+        >
+          @if(patient.bloodPressure){
+          <p>Blood pressure: Yes</p>
+          }@else {
+          <p>Blood pressure: No</p>
+          }
+        </div>
+        <div
+          class="flex flex-row-reverse gap-2 justify-center items-center mb-2"
+        >
+          @if(patient.allergy){
+          <p>Blood allergy: Yes</p>
+          }@else {
+          <p>Blood allergy: No</p>
+          }
+        </div>
+        <mat-divider></mat-divider>
+        <div class="card-body flex flex-row gap-5 justify-center items-center">
+          <a [routerLink]="['/patients/edit/' + patient.id]" class="card-link">
+            <mat-icon>edit</mat-icon>
+          </a>
+          <button (click)="deletePatient(patient.id)" class="card-link">
+            <mat-icon>delete</mat-icon>
+          </button>
+          <a [routerLink]="['/patient-visits/' + patient.id]" class="card-link">
+            <mat-icon>history_2</mat-icon>
+          </a>
+        </div>
+      </div>
+      }
+    </div>
+  </div>
+</div>
+
+<!-- <div class="grid grid-cols-3 gap-4">
+  <div
+    class="container mx-auto my-8 p-8 bg-white shadow-md rounded-md max-w-md"
+  >
+    <h1 class="text-3xl text-gray-600 font-bold mb-4 text-center">
+      Ptient Detail
+    </h1>
+    <div *ngIf="patients$ | async as patient">
+      <div class="text-center">
+        <div
+          class="rounded-full bg-blue-400 my-4 text-4xl w-24 h-24 inline-flex items-center justify-center font-bold text-white"
+        >
+          {{ patient.name[0] | uppercase }}
+        </div>
+      </div>
+      <hr class="py-4 border-slate-400" />
+      <div class="grid grid-cols-2 gap-4">
+        <div class="text-gray-600 font-bold">Full Name</div>
+        <div class="text-gray-800 font-light">
+          {{ patient.name | titlecase }}
+        </div>
+        <div class="text-gray-600 font-bold">Email</div>
+        <div class="text-gray-800 font-light">
+          {{ user.email }}
+        </div>
+
+        <div class="text-gray-600 font-bold">Roles</div>
+        <div>
+          <ul class="flex gap-1 text-xs">
+            <li
+              *ngFor="let role of user.roles"
+              class="bg-blue-700 text-white rounded-md py-1 px-2"
+            >
+              {{ role }}
+            </li>
+          </ul>
+        </div>
+        <div class="text-gray-600 font-bold">Phone</div>
+        <div class="text-gray-800 font-light">
+          {{ user.phoneNumber || "-" }}
+        </div>
+        <div class="text-gray-600 font-bold">Access Failed Count</div>
+        <div class="text-gray-800 font-light">
+          {{ user.accessFailedCount }}
+        </div>
+      </div>
+    </div>
+  </div>
+</div> -->

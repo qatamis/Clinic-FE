@@ -1,0 +1,53 @@
+<div class="row flex justify-between">
+  <div class="col"><h4 class="fw-bold p-3">Ptients Visits</h4></div>
+  <div class="col d-flex flex-column align-items-end">
+    <a
+      class="text-decoration-none"
+      [routerLink]="'/patient-visits/add/' + this.IDnumber"
+      ><h5 class="fw-bold p-3">New Visit</h5></a
+    >
+  </div>
+</div>
+<div class="flex flex-col items-center pt-10">
+  <table class="table w-[95%] items-center justify-center border">
+    <thead>
+      <tr align="left">
+        <th scope="col" align="center" class="p-2 border fw-normal">#</th>
+        <th scope="col" class="p-2 border fw-normal">On Duty Dr. Name</th>
+        <th scope="col" class="p-2 border fw-normal">Visit Date</th>
+        <th scope="col" class="p-2 border fw-normal">Actions</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr *ngFor="let visit of visits; index as i">
+        <th scope="row" class="text-xs border p-2">{{ i + 1 }}</th>
+        <th scope="row" class="text-xs border p-2">{{ visit.onDutyDrName }}</th>
+        <th scope="row" class="text-xs border p-2">
+          {{ visit.visitDate | date }}
+        </th>
+        <th scope="row" class="text-xs border p-2">
+          <a
+            [routerLink]="'/patient-visits/view/' + visit.id"
+            class="card-link p-3"
+          >
+            <svg
+              xmlns="http://www.w3.org/2000/svg"
+              width="16"
+              height="16"
+              fill="currentColor"
+              class="bi bi-eye"
+              viewBox="0 0 16 16"
+            >
+              <path
+                d="M16 8s-3-5.5-8-5.5S0 8 0 8s3 5.5 8 5.5S16 8 16 8M1.173 8a13 13 0 0 1 1.66-2.043C4.12 4.668 5.88 3.5 8 3.5s3.879 1.168 5.168 2.457A13 13 0 0 1 14.828 8q-.086.13-.195.288c-.335.48-.83 1.12-1.465 1.755C11.879 11.332 10.119 12.5 8 12.5s-3.879-1.168-5.168-2.457A13 13 0 0 1 1.172 8z"
+              />
+              <path
+                d="M8 5.5a2.5 2.5 0 1 0 0 5 2.5 2.5 0 0 0 0-5M4.5 8a3.5 3.5 0 1 1 7 0 3.5 3.5 0 0 1-7 0"
+              />
+            </svg>
+          </a>
+        </th>
+      </tr>
+    </tbody>
+  </table>
+</div>

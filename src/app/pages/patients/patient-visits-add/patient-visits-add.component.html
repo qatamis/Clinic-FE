@@ -1,0 +1,74 @@
+<div class="row">
+  <div class="col-md-2"></div>
+  <div class="col-md-8">
+    <h4 class="p-2">Add Patient</h4>
+    <form
+      #form="ngForm"
+      class="shadow mx-auto p-5 rounded-2 mt-5"
+      (ngSubmit)="onSubmit()"
+    >
+      <textarea
+        type="text"
+        class="form-control border-1 w-100 my-3 p-2 px-4 rounded-2"
+        id="diagnoses"
+        name="diagnoses"
+        placeholder="Diagnoses"
+        [(ngModel)]="newVisit.diagnoses"
+      ></textarea>
+      <textarea
+        type="text"
+        class="form-control border-1 w-100 my-3 p-2 px-4 rounded-2"
+        id="inclinicTreatment"
+        name="inclinicTreatment"
+        placeholder="In Clinic Treatment"
+        [(ngModel)]="newVisit.inclinicTreatment"
+      ></textarea>
+      <textarea
+        type="text"
+        class="form-control border-1 w-100 my-3 p-2 px-4 rounded-2"
+        id="inhouseTreatment"
+        name="inhouseTreatment"
+        placeholder="In House Treatment"
+        [(ngModel)]="newVisit.inhouseTreatment"
+      ></textarea>
+      <input
+        type="number"
+        class="form-control border-1 w-100 my-3 p-2 px-4 rounded-2"
+        id="treatmentCost"
+        name="treatmentCost"
+        placeholder="Treatment Cost"
+        [(ngModel)]="newVisit.treatmentCost"
+      />
+      <input
+        type="text"
+        class="form-control border-1 w-100 my-3 p-2 px-4 rounded-2"
+        id="onDutyDrName"
+        name="onDutyDrName"
+        placeholder="On Duty Dr. Name"
+        [(ngModel)]="newVisit.onDutyDrName"
+      />
+      <input
+        type="date"
+        class="form-control border-1 w-100 my-3 p-2 px-4 rounded-2"
+        id="visitDate"
+        name="visitDate"
+        placeholder="On Duty Dr. Name"
+        [(ngModel)]="newVisit.visitDate"
+      />
+      <hr />
+      <div class="row">
+        <div class="col-md-6">
+          <button class="btn btn-outline-primary form-control">Save</button>
+        </div>
+        <div class="col-md-6">
+          <a
+            [routerLink]="'/patients'"
+            class="btn btn-outline-secondary form-control"
+            >Cancel</a
+          >
+        </div>
+      </div>
+    </form>
+  </div>
+  <div class="col-md-2"></div>
+</div>

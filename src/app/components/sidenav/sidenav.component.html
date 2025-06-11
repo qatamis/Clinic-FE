@@ -1,0 +1,30 @@
+<div class="sidenav-header">
+  <!-- <img
+    [width]="profilePicSize()"
+    [height]="profilePicSize()"
+    src="/profile-pic.jpg"
+  /> -->
+  <div class="header-text">
+    <h2>Dr. Ayman</h2>
+    <p>Clinic</p>
+  </div>
+  <mat-nav-list>
+    <a
+      [style.border-radius]="'unset'"
+      mat-list-item
+      class="menu-item"
+      *ngFor="let item of menuItems()"
+      [routerLink]="item.route"
+      routerLinkActive="selected-menu-item"
+      #rla="routerLinkActive"
+      [activated]="rla.isActive"
+    >
+      <mat-icon
+        [fontSet]="rla.isActive ? 'material-icons' : 'material-icons-outlined'"
+        matListItemIcon
+        >{{ item.icon }}</mat-icon
+      >
+      <span matListItemTitle *ngIf="!sidenavCollapsed()">{{ item.label }}</span>
+    </a>
+  </mat-nav-list>
+</div>

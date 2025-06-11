@@ -1,0 +1,55 @@
+<div class="row">
+  <div class="col-md-2"></div>
+  <div class="col-md-8">
+    <h4 class="p-2">Patient Visit Details</h4>
+    <form
+      #form="ngForm"
+      (ngSubmit)="onSubmit()"
+      class="shadow mx-auto p-5 rounded-2 mt-5"
+    >
+      <textarea
+        type="text"
+        class="form-control border-1 w-100 my-3 p-2 px-4 rounded-2"
+        id="diagnoses"
+        name="diagnoses"
+        [(ngModel)]="visitView.diagnoses"
+      ></textarea>
+      <textarea
+        type="text"
+        class="form-control border-1 w-100 my-3 p-2 px-4 rounded-2"
+        id="inclinicTreatment"
+        name="inclinicTreatment"
+        [(ngModel)]="visitView.inclinicTreatment"
+      ></textarea>
+      <textarea
+        type="text"
+        class="form-control border-1 w-100 my-3 p-2 px-4 rounded-2"
+        id="inhouseTreatment"
+        name="inhouseTreatment"
+        [(ngModel)]="visitView.inhouseTreatment"
+      ></textarea>
+      <input
+        type="number"
+        class="form-control border-1 w-100 my-3 p-2 px-4 rounded-2"
+        id="treatmentCost"
+        name="treatmentCost"
+        [(ngModel)]="visitView.treatmentCost"
+      />
+      <input
+        type="text"
+        class="form-control border-1 w-100 my-3 p-2 px-4 rounded-2"
+        id="onDutyDrName"
+        name="onDutyDrName"
+        [(ngModel)]="visitView.onDutyDrName"
+      />
+      <input
+        type="text"
+        class="form-control border-1 w-100 my-3 p-2 px-4 rounded-2"
+        id="visitDate"
+        name="visitDate"
+        [(ngModel)]="visitView.visitDate"
+      />
+    </form>
+  </div>
+  <div class="col-md-2"></div>
+</div>
