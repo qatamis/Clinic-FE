@@ -19,7 +19,7 @@ import { AuthService } from './services/auth.service';
 export class AppComponent {
   title = 'Clinic';
   collapsed = signal(false);
-  sidenavWidth = computed(() => this.collapsed() ? '65px' : '250px');
+  sidenavWidth = computed(() => this.collapsed() ? '65px' : '200px');
 
   authService = inject(AuthService);
   matSnackBar = inject(MatSnackBar);
