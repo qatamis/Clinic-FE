@@ -36,7 +36,7 @@ export class RegisterComponent implements OnInit {
       next: (response) =>{
         console.log(response);
         
-        this.matSnackbar.open(response.message, 'Close', {
+        this.matSnackbar.open(response.message || 'Registration successful', 'Close', {
           duration: 5000,
           horizontalPosition: 'center',
         });

@@ -1,55 +1,143 @@
-<div class="row">
-  <div class="col-md-2"></div>
-  <div class="col-md-8">
-    <h4 class="p-2">Patient Visit Details</h4>
-    <form
-      #form="ngForm"
-      (ngSubmit)="onSubmit()"
-      class="shadow mx-auto p-5 rounded-2 mt-5"
-    >
-      <textarea
-        type="text"
-        class="form-control border-1 w-100 my-3 p-2 px-4 rounded-2"
-        id="diagnoses"
-        name="diagnoses"
-        [(ngModel)]="visitView.diagnoses"
-      ></textarea>
-      <textarea
-        type="text"
-        class="form-control border-1 w-100 my-3 p-2 px-4 rounded-2"
-        id="inclinicTreatment"
-        name="inclinicTreatment"
-        [(ngModel)]="visitView.inclinicTreatment"
-      ></textarea>
-      <textarea
-        type="text"
-        class="form-control border-1 w-100 my-3 p-2 px-4 rounded-2"
-        id="inhouseTreatment"
-        name="inhouseTreatment"
-        [(ngModel)]="visitView.inhouseTreatment"
-      ></textarea>
-      <input
-        type="number"
-        class="form-control border-1 w-100 my-3 p-2 px-4 rounded-2"
-        id="treatmentCost"
-        name="treatmentCost"
-        [(ngModel)]="visitView.treatmentCost"
-      />
-      <input
-        type="text"
-        class="form-control border-1 w-100 my-3 p-2 px-4 rounded-2"
-        id="onDutyDrName"
-        name="onDutyDrName"
-        [(ngModel)]="visitView.onDutyDrName"
-      />
-      <input
-        type="text"
-        class="form-control border-1 w-100 my-3 p-2 px-4 rounded-2"
-        id="visitDate"
-        name="visitDate"
-        [(ngModel)]="visitView.visitDate"
-      />
-    </form>
+<div class="flex flex-col pt-8 min-h-screen">
+  <div class="container mx-auto px-4 max-w-4xl">
+    <!-- Header -->
+    <div class="mb-6">
+      <h1 class="text-3xl font-bold text-gray-800 mb-2">{{ 'visit.visitDetails' | translate }}</h1>
+      <p class="text-gray-600">{{ 'visit.viewVisitDescription' | translate }}</p>
+    </div>
+
+    <!-- Form Card -->
+    <div class="bg-white rounded-lg shadow-lg p-6 md:p-8">
+      <form
+        #form="ngForm"
+        (ngSubmit)="onSubmit()"
+        class="space-y-4"
+      >
+        <!-- Diagnoses -->
+        <mat-form-field appearance="outline" class="w-full">
+          <mat-label>{{ 'visit.diagnoses' | translate }}</mat-label>
+          <textarea
+            matInput
+            id="diagnoses"
+            name="diagnoses"
+            rows="3"
+            [(ngModel)]="visitView.diagnoses"
+            readonly
+          ></textarea>
+          <mat-icon matPrefix>description</mat-icon>
+        </mat-form-field>
+
+        <!-- In Clinic Treatment -->
+        <mat-form-field appearance="outline" class="w-full">
+          <mat-label>{{ 'visit.inClinicTreatment' | translate }}</mat-label>
+          <textarea
+            matInput
+            id="inclinicTreatment"
+            name="inclinicTreatment"
+            rows="3"
+            [(ngModel)]="visitView.inclinicTreatment"
+            readonly
+          ></textarea>
+          <mat-icon matPrefix>local_hospital</mat-icon>
+        </mat-form-field>
+
+        <!-- In House Treatment -->
+        <mat-form-field appearance="outline" class="w-full">
+          <mat-label>{{ 'visit.inHouseTreatment' | translate }}</mat-label>
+          <textarea
+            matInput
+            id="inhouseTreatment"
+            name="inhouseTreatment"
+            rows="3"
+            [(ngModel)]="visitView.inhouseTreatment"
+            readonly
+          ></textarea>
+          <mat-icon matPrefix>home</mat-icon>
+        </mat-form-field>
+
+        <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+          <!-- Treatment Cost -->
+          <mat-form-field appearance="outline" class="w-full">
+            <mat-label>{{ 'visit.treatmentCost' | translate }}</mat-label>
+            <input
+              matInput
+              type="number"
+              id="treatmentCost"
+              name="treatmentCost"
+              [(ngModel)]="visitView.treatmentCost"
+              readonly
+            />
+            <mat-icon matPrefix>attach_money</mat-icon>
+          </mat-form-field>
+
+          <!-- Visit Date -->
+          <mat-form-field appearance="outline" class="w-full">
+            <mat-label>{{ 'visit.visitDate' | translate }}</mat-label>
+            <input
+              matInput
+              type="text"
+              id="visitDate"
+              name="visitDate"
+              [ngModel]="visitView.visitDate | date"
+              readonly
+            />
+            <mat-icon matPrefix>calendar_today</mat-icon>
+          </mat-form-field>
+        </div>
+
+        <!-- Doctor Name -->
+        <mat-form-field appearance="outline" class="w-full">
+          <mat-label>{{ 'visit.onDutyDrName' | translate }}</mat-label>
+          <input
+            matInput
+            type="text"
+            id="onDutyDrName"
+            name="onDutyDrName"
+            [(ngModel)]="visitView.onDutyDrName"
+            readonly
+          />
+          <mat-icon matPrefix>medical_services</mat-icon>
+        </mat-form-field>
+
+        <!-- Insurance Information -->
+        @if(visitView.insuranceCoveragePercentage && visitView.insuranceCoveragePercentage > 0) {
+          <div class="bg-blue-50 border border-blue-200 rounded-lg p-4">
+            <h3 class="font-semibold text-blue-800 mb-3 flex items-center gap-2">
+              <mat-icon class="text-blue-600">business</mat-icon>
+              {{ 'visit.insuranceInformation' | translate }}
+            </h3>
+            <div class="grid grid-cols-1 md:grid-cols-3 gap-4">
+              <div>
+                <p class="text-sm text-gray-600 mb-1">{{ 'visit.insuranceCoveragePercentage' | translate }}</p>
+                <p class="text-lg font-semibold text-blue-700">{{ visitView.insuranceCoveragePercentage }}%</p>
+              </div>
+              @if(visitView.insuranceCoveredAmount) {
+                <div>
+                  <p class="text-sm text-gray-600 mb-1">{{ 'visit.insuranceCoveredAmount' | translate }}</p>
+                  <p class="text-lg font-semibold text-blue-700">{{ visitView.insuranceCoveredAmount | number:'1.2-2' }} {{ 'dashboard.currency' | translate }}</p>
+                </div>
+              }
+              @if(visitView.patientPaidAmount) {
+                <div>
+                  <p class="text-sm text-gray-600 mb-1">{{ 'visit.patientPaidAmount' | translate }}</p>
+                  <p class="text-lg font-semibold text-green-700">{{ visitView.patientPaidAmount | number:'1.2-2' }} {{ 'dashboard.currency' | translate }}</p>
+                </div>
+              }
+            </div>
+          </div>
+        }
+
+        <!-- Action Buttons -->
+        <div class="flex flex-col sm:flex-row gap-4 pt-4 border-t border-gray-200">
+          <a
+            [routerLink]="'/patient-visits/' + visitView.patientId"
+            mat-stroked-button
+            class="flex-1 h-12 flex items-center justify-center">
+            <mat-icon>arrow_back</mat-icon>
+            <span class="ml-2">{{ 'common.back' | translate }}</span>
+          </a>
+        </div>
+      </form>
+    </div>
   </div>
-  <div class="col-md-2"></div>
 </div>

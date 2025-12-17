@@ -5,17 +5,20 @@ import { MatInputModule } from '@angular/material/input'
 import { Router, RouterLink } from '@angular/router';
 import { AuthService } from '../../services/auth.service';
 import { MatSnackBar, MatSnackBarModule } from '@angular/material/snack-bar';
+import { TranslateModule, TranslateService } from '@ngx-translate/core';
+import { CommonModule } from '@angular/common';
 
 @Component({
   selector: 'app-login',
-  imports: [MatInputModule, RouterLink, MatSnackBarModule, MatIconModule, ReactiveFormsModule],
+  imports: [CommonModule, MatInputModule, RouterLink, MatSnackBarModule, MatIconModule, ReactiveFormsModule, TranslateModule],
   templateUrl: './login.component.html',
   styleUrl: './login.component.css'
 })
 export class LoginComponent implements OnInit{
   authService = inject(AuthService);
   matSnackBar = inject(MatSnackBar);
-  router = inject(Router)
+  router = inject(Router);
+  translate = inject(TranslateService);
   hide = true;
   form!:FormGroup;
   fb = inject(FormBuilder);
@@ -23,17 +26,25 @@ export class LoginComponent implements OnInit{
   Login(){
     this.authService.Login(this.form.value).subscribe({
       next: (response) => {
-        this.matSnackBar.open(response.message, 'Close', {
-          duration: 5000,
-          horizontalPosition: 'center',
-        })
+        this.translate.get('auth.loginSuccess').subscribe((message) => {
+          this.translate.get('common.close').subscribe((closeText) => {
+            this.matSnackBar.open(response.message || message, closeText, {
+              duration: 5000,
+              horizontalPosition: 'center',
+            });
+          });
+        });
         this.router.navigate(['/'])
       },
       error: (error) => {
-        this.matSnackBar.open(error.error.message, 'Close', {
-          duration: 5000,
-          horizontalPosition: 'center',
-        })
+        this.translate.get('auth.invalidCredentials').subscribe((message) => {
+          this.translate.get('common.close').subscribe((closeText) => {
+            this.matSnackBar.open(error.error?.message || message, closeText, {
+              duration: 5000,
+              horizontalPosition: 'center',
+            });
+          });
+        });
       }
     })
   }

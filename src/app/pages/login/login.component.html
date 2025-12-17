@@ -5,22 +5,22 @@
     (ngSubmit)="Login()"
   >
     <div class="py-4">
-      <h1 class="font-bold py-2">Login</h1>
-      <h6 class="text-slate-600 text-base">Login to your account</h6>
+      <h1 class="font-bold py-2">{{ 'auth.login' | translate }}</h1>
+      <h6 class="text-slate-600 text-base">{{ 'auth.login' | translate }} {{ 'common.to' | translate }} {{ 'account.title' | translate }}</h6>
     </div>
 
     <mat-form-field apperance="fill" class="w-full">
-      <mat-label>Email</mat-label>
-      <input matInput placeholder="Email" formControlName="email" />
+      <mat-label>{{ 'auth.email' | translate }}</mat-label>
+      <input matInput [placeholder]="'auth.email' | translate" formControlName="email" />
       <mat-icon matPrefix>email</mat-icon>
     </mat-form-field>
 
     <mat-form-field apperance="fill" class="w-full">
-      <mat-label>Password</mat-label>
+      <mat-label>{{ 'auth.password' | translate }}</mat-label>
       <input
         matInput
         type="{{ hide ? 'password' : 'text' }}"
-        placeholder="Password"
+        [placeholder]="'auth.password' | translate"
         formControlName="password"
       />
       <mat-icon matPrefix>lock</mat-icon>
@@ -34,12 +34,12 @@
       [disabled]="!form.valid"
       class="w-full border border-slate-200 rounded-md disabled:bg-blue-400 py-2 px-3 bg-blue-700 text-white font-bold"
     >
-      Login
+      {{ 'auth.login' | translate }}
     </button>
 
     <div class="my-5">
-      <span class="text-slate-600"> Don't have an Account? </span>
-      <a class="text-blue-700" [routerLink]="['/register']">Register</a>
+      <span class="text-slate-600">{{ 'auth.dontHaveAccount' | translate }} </span>
+      <a class="text-blue-700" [routerLink]="['/register']">{{ 'auth.register' | translate }}</a>
     </div>
   </form>
 </div>

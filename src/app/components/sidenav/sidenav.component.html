@@ -1,16 +1,20 @@
-<div class="sidenav-header">
-  <!-- <img
-    [width]="profilePicSize()"
-    [height]="profilePicSize()"
-    src="/profile-pic.jpg"
-  /> -->
-  <div class="header-text">
-    <h2>Dr. Ayman</h2>
-    <p>Clinic</p>
+<div class="sidenav-container">
+  <!-- Header Section with Gradient -->
+  <div class="sidenav-header">
+    <div class="header-content" [class.collapsed]="sidenavCollapsed()">
+      <div class="clinic-icon" [class.collapsed-icon]="sidenavCollapsed()">
+        <mat-icon>local_hospital</mat-icon>
+      </div>
+      <div class="header-text" *ngIf="!sidenavCollapsed()">
+        <h2>{{ 'dashboard.clinicName' | translate }}</h2>
+        <p>{{ 'menu.clinicSubtitle' | translate }}</p>
+      </div>
+    </div>
   </div>
-  <mat-nav-list>
+
+  <!-- Menu Items -->
+  <mat-nav-list class="menu-list">
     <a
-      [style.border-radius]="'unset'"
       mat-list-item
       class="menu-item"
       *ngFor="let item of menuItems()"
@@ -19,12 +23,23 @@
       #rla="routerLinkActive"
       [activated]="rla.isActive"
     >
-      <mat-icon
-        [fontSet]="rla.isActive ? 'material-icons' : 'material-icons-outlined'"
-        matListItemIcon
-        >{{ item.icon }}</mat-icon
-      >
-      <span matListItemTitle *ngIf="!sidenavCollapsed()">{{ item.label }}</span>
+      <div class="menu-item-content" [class.collapsed]="sidenavCollapsed()">
+        <div class="menu-icon-wrapper" [class.active]="rla.isActive" [class.collapsed-icon]="sidenavCollapsed()">
+          <mat-icon>{{ item.icon }}</mat-icon>
+        </div>
+        <span class="menu-label" *ngIf="!sidenavCollapsed()">
+          {{ (item.label | translate) || item.label }}
+        </span>
+      </div>
+      <div class="menu-indicator" *ngIf="rla.isActive && !sidenavCollapsed()"></div>
     </a>
   </mat-nav-list>
+
+  <!-- Footer Section -->
+  <div class="sidenav-footer" *ngIf="!sidenavCollapsed()">
+    <div class="footer-content">
+      <mat-icon>favorite</mat-icon>
+      <span>{{ 'menu.footerText' | translate }}</span>
+    </div>
+  </div>
 </div>

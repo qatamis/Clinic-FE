@@ -1,0 +1,135 @@
+<div class="flex flex-col pt-8 min-h-screen">
+  <div class="container mx-auto px-4 max-w-4xl">
+    <!-- Header -->
+    <div class="mb-6">
+      <h1 class="text-3xl font-bold text-gray-800 mb-2">{{ 'appointments.addAppointment' | translate }}</h1>
+      <p class="text-gray-600">{{ 'appointments.addAppointmentDescription' | translate }}</p>
+    </div>
+
+    <!-- Form Card -->
+    <div class="bg-white rounded-lg shadow-lg p-6 md:p-8">
+      <form
+        #form="ngForm"
+        (ngSubmit)="onSubmit()"
+        class="space-y-4"
+      >
+        <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+          <!-- Patient Selection -->
+          <mat-form-field appearance="outline" class="w-full">
+            <mat-label>{{ 'appointments.patient' | translate }} *</mat-label>
+            <mat-select [(ngModel)]="newAppointment.patientId" name="patientId" required>
+              <mat-option value="">{{ 'appointments.selectPatient' | translate }}</mat-option>
+              @for (patient of patients; track patient.id) {
+                <mat-option [value]="patient.id">{{ patient.name }}</mat-option>
+              }
+            </mat-select>
+            <mat-icon matPrefix>personal_injury</mat-icon>
+          </mat-form-field>
+
+          <!-- Doctor Selection -->
+          <mat-form-field appearance="outline" class="w-full">
+            <mat-label>{{ 'appointments.doctor' | translate }} *</mat-label>
+            <mat-select [(ngModel)]="newAppointment.doctorId" name="doctorId" required>
+              <mat-option value="">{{ 'appointments.selectDoctor' | translate }}</mat-option>
+              @for (doctor of doctors; track doctor.id) {
+                <mat-option [value]="doctor.id">{{ doctor.fullName }}</mat-option>
+              }
+            </mat-select>
+            <mat-icon matPrefix>medical_services</mat-icon>
+          </mat-form-field>
+        </div>
+
+        <div class="grid grid-cols-1 md:grid-cols-3 gap-4">
+          <!-- Appointment Date & Time -->
+          <mat-form-field appearance="outline" class="w-full md:col-span-2">
+            <mat-label>{{ 'appointments.appointmentDateTime' | translate }} *</mat-label>
+            <input
+              matInput
+              type="datetime-local"
+              [(ngModel)]="selectedDateTime"
+              (ngModelChange)="onDateTimeChange()"
+              name="appointmentDate"
+              required
+            />
+            <mat-icon matPrefix>calendar_today</mat-icon>
+          </mat-form-field>
+
+          <!-- Duration -->
+          <mat-form-field appearance="outline" class="w-full">
+            <mat-label>{{ 'appointments.duration' | translate }} *</mat-label>
+            <input
+              matInput
+              type="number"
+              [(ngModel)]="newAppointment.duration"
+              name="duration"
+              min="15"
+              max="240"
+              step="15"
+              required
+            />
+            <span matSuffix>{{ 'appointments.minutes' | translate }}</span>
+            <mat-icon matPrefix>schedule</mat-icon>
+          </mat-form-field>
+        </div>
+
+        <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+          <!-- Status -->
+          <mat-form-field appearance="outline" class="w-full">
+            <mat-label>{{ 'appointments.status' | translate }} *</mat-label>
+            <mat-select [(ngModel)]="newAppointment.status" name="status" required>
+              @for (status of statuses; track status) {
+                <mat-option [value]="status">{{ status }}</mat-option>
+              }
+            </mat-select>
+            <mat-icon matPrefix>info</mat-icon>
+          </mat-form-field>
+
+          <!-- Appointment Type -->
+          <mat-form-field appearance="outline" class="w-full">
+            <mat-label>{{ 'appointments.appointmentType' | translate }}</mat-label>
+            <mat-select [(ngModel)]="newAppointment.appointmentType" name="appointmentType">
+              <mat-option value="">{{ 'common.optional' | translate }}</mat-option>
+              @for (type of appointmentTypes; track type) {
+                <mat-option [value]="type">{{ type }}</mat-option>
+              }
+            </mat-select>
+            <mat-icon matPrefix>category</mat-icon>
+          </mat-form-field>
+        </div>
+
+        <!-- Notes -->
+        <mat-form-field appearance="outline" class="w-full">
+          <mat-label>{{ 'appointments.notes' | translate }}</mat-label>
+          <textarea
+            matInput
+            rows="3"
+            [(ngModel)]="newAppointment.notes"
+            name="notes"
+          ></textarea>
+          <mat-icon matPrefix>notes</mat-icon>
+        </mat-form-field>
+
+        <!-- Action Buttons -->
+        <div class="flex flex-col sm:flex-row gap-4 pt-4 border-t border-gray-200">
+          <button
+            type="submit"
+            mat-raised-button
+            color="primary"
+            [disabled]="!form.valid"
+            class="flex-1 h-12">
+            <mat-icon>save</mat-icon>
+            <span class="ml-2">{{ 'common.save' | translate }}</span>
+          </button>
+          <a
+            [routerLink]="'/appointments'"
+            mat-stroked-button
+            class="flex-1 h-12 flex items-center justify-center">
+            <mat-icon>cancel</mat-icon>
+            <span class="ml-2">{{ 'common.cancel' | translate }}</span>
+          </a>
+        </div>
+      </form>
+    </div>
+  </div>
+</div>
+

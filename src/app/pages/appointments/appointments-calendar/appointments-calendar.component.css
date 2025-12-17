@@ -1,0 +1,33 @@
+/* Calendar Component Styles */
+
+/* Ensure appointment items are visible */
+.space-y-1 > div {
+  display: block !important;
+  visibility: visible !important;
+  opacity: 1 !important;
+}
+
+/* Status color backgrounds */
+.bg-green-500 {
+  background-color: #10b981 !important;
+}
+
+.bg-blue-500 {
+  background-color: #3b82f6 !important;
+}
+
+.bg-gray-500 {
+  background-color: #6b7280 !important;
+}
+
+.bg-red-500 {
+  background-color: #ef4444 !important;
+}
+
+.bg-orange-500 {
+  background-color: #f97316 !important;
+}
+
+.bg-yellow-500 {
+  background-color: #eab308 !important;
+}

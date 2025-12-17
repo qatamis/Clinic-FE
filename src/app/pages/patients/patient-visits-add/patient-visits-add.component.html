@@ -1,74 +1,150 @@
-<div class="row">
-  <div class="col-md-2"></div>
-  <div class="col-md-8">
-    <h4 class="p-2">Add Patient</h4>
-    <form
-      #form="ngForm"
-      class="shadow mx-auto p-5 rounded-2 mt-5"
-      (ngSubmit)="onSubmit()"
-    >
-      <textarea
-        type="text"
-        class="form-control border-1 w-100 my-3 p-2 px-4 rounded-2"
-        id="diagnoses"
-        name="diagnoses"
-        placeholder="Diagnoses"
-        [(ngModel)]="newVisit.diagnoses"
-      ></textarea>
-      <textarea
-        type="text"
-        class="form-control border-1 w-100 my-3 p-2 px-4 rounded-2"
-        id="inclinicTreatment"
-        name="inclinicTreatment"
-        placeholder="In Clinic Treatment"
-        [(ngModel)]="newVisit.inclinicTreatment"
-      ></textarea>
-      <textarea
-        type="text"
-        class="form-control border-1 w-100 my-3 p-2 px-4 rounded-2"
-        id="inhouseTreatment"
-        name="inhouseTreatment"
-        placeholder="In House Treatment"
-        [(ngModel)]="newVisit.inhouseTreatment"
-      ></textarea>
-      <input
-        type="number"
-        class="form-control border-1 w-100 my-3 p-2 px-4 rounded-2"
-        id="treatmentCost"
-        name="treatmentCost"
-        placeholder="Treatment Cost"
-        [(ngModel)]="newVisit.treatmentCost"
-      />
-      <input
-        type="text"
-        class="form-control border-1 w-100 my-3 p-2 px-4 rounded-2"
-        id="onDutyDrName"
-        name="onDutyDrName"
-        placeholder="On Duty Dr. Name"
-        [(ngModel)]="newVisit.onDutyDrName"
-      />
-      <input
-        type="date"
-        class="form-control border-1 w-100 my-3 p-2 px-4 rounded-2"
-        id="visitDate"
-        name="visitDate"
-        placeholder="On Duty Dr. Name"
-        [(ngModel)]="newVisit.visitDate"
-      />
-      <hr />
-      <div class="row">
-        <div class="col-md-6">
-          <button class="btn btn-outline-primary form-control">Save</button>
+<div class="flex flex-col pt-8 min-h-screen">
+  <div class="container mx-auto px-4 max-w-4xl">
+    <!-- Header -->
+    <div class="mb-6">
+      <h1 class="text-3xl font-bold text-gray-800 mb-2">{{ 'visit.addVisit' | translate }}</h1>
+      <p class="text-gray-600">{{ 'visit.addVisitDescription' | translate }}</p>
+    </div>
+
+    <!-- Form Card -->
+    <div class="bg-white rounded-lg shadow-lg p-6 md:p-8">
+      <form
+        #form="ngForm"
+        (ngSubmit)="onSubmit()"
+        class="space-y-4"
+      >
+        <!-- Diagnoses -->
+        <mat-form-field appearance="outline" class="w-full">
+          <mat-label>{{ 'visit.diagnoses' | translate }}</mat-label>
+          <textarea
+            matInput
+            id="diagnoses"
+            name="diagnoses"
+            rows="3"
+            [(ngModel)]="newVisit.diagnoses"
+          ></textarea>
+          <mat-icon matPrefix>description</mat-icon>
+        </mat-form-field>
+
+        <!-- In Clinic Treatment -->
+        <mat-form-field appearance="outline" class="w-full">
+          <mat-label>{{ 'visit.inClinicTreatment' | translate }}</mat-label>
+          <textarea
+            matInput
+            id="inclinicTreatment"
+            name="inclinicTreatment"
+            rows="3"
+            [(ngModel)]="newVisit.inclinicTreatment"
+          ></textarea>
+          <mat-icon matPrefix>local_hospital</mat-icon>
+        </mat-form-field>
+
+        <!-- In House Treatment -->
+        <mat-form-field appearance="outline" class="w-full">
+          <mat-label>{{ 'visit.inHouseTreatment' | translate }}</mat-label>
+          <textarea
+            matInput
+            id="inhouseTreatment"
+            name="inhouseTreatment"
+            rows="3"
+            [(ngModel)]="newVisit.inhouseTreatment"
+          ></textarea>
+          <mat-icon matPrefix>home</mat-icon>
+        </mat-form-field>
+
+        <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+          <!-- Treatment Cost -->
+          <mat-form-field appearance="outline" class="w-full">
+            <mat-label>{{ 'visit.treatmentCost' | translate }}</mat-label>
+            <input
+              matInput
+              type="number"
+              id="treatmentCost"
+              name="treatmentCost"
+              [(ngModel)]="newVisit.treatmentCost"
+              (ngModelChange)="calculateInsuranceAmounts()"
+            />
+            <mat-icon matPrefix>attach_money</mat-icon>
+          </mat-form-field>
+
+          <!-- Visit Date -->
+          <mat-form-field appearance="outline" class="w-full">
+            <mat-label>{{ 'visit.visitDate' | translate }}</mat-label>
+            <input
+              matInput
+              type="date"
+              id="visitDate"
+              name="visitDate"
+              [(ngModel)]="newVisit.visitDate"
+            />
+            <mat-icon matPrefix>calendar_today</mat-icon>
+          </mat-form-field>
         </div>
-        <div class="col-md-6">
+
+        <!-- Insurance Information -->
+        @if(patient && patient.insuranceCompanyId) {
+          <div class="bg-blue-50 border border-blue-200 rounded-lg p-4 mb-4">
+            <div class="flex items-center gap-2 mb-2">
+              <mat-icon class="text-blue-600">info</mat-icon>
+              <span class="font-semibold text-blue-800">{{ 'visit.patientHasInsurance' | translate }}</span>
+            </div>
+            <p class="text-sm text-blue-700">{{ patient.insuranceCompanyName || '' }}</p>
+            @if(patient.insurancePolicyNumber) {
+              <p class="text-sm text-blue-700">{{ 'visit.policyNumber' | translate }}: {{ patient.insurancePolicyNumber }}</p>
+            }
+          </div>
+
+          <mat-form-field appearance="outline" class="w-full">
+            <mat-label>{{ 'visit.insuranceCoveragePercentage' | translate }} ({{ 'common.optional' | translate }})</mat-label>
+            <input
+              matInput
+              type="number"
+              id="insuranceCoveragePercentage"
+              name="insuranceCoveragePercentage"
+              [(ngModel)]="newVisit.insuranceCoveragePercentage"
+              (ngModelChange)="calculateInsuranceAmounts()"
+              min="0"
+              max="100"
+              step="0.01"
+            />
+            <span matSuffix>%</span>
+            <mat-icon matPrefix>percent</mat-icon>
+            <mat-hint>{{ 'visit.insuranceCoverageHint' | translate }}</mat-hint>
+          </mat-form-field>
+        }
+
+        <!-- Doctor Selection -->
+        <mat-form-field appearance="outline" class="w-full">
+          <mat-label>{{ 'visit.onDutyDrName' | translate }}</mat-label>
+          <mat-select [(ngModel)]="newVisit.onDutyDrName" name="onDutyDrName" required>
+            <mat-option value="">{{ 'visit.selectDoctor' | translate }}</mat-option>
+            @for (doctor of doctors; track doctor.id) {
+              <mat-option [value]="doctor.fullName">{{ doctor.fullName }}</mat-option>
+            }
+          </mat-select>
+          <mat-icon matPrefix>medical_services</mat-icon>
+        </mat-form-field>
+
+        <!-- Action Buttons -->
+        <div class="flex flex-col sm:flex-row gap-4 pt-4 border-t border-gray-200">
+          <button
+            type="submit"
+            mat-raised-button
+            color="primary"
+            [disabled]="!form.valid"
+            class="flex-1 h-12">
+            <mat-icon>save</mat-icon>
+            <span class="ml-2">{{ 'common.save' | translate }}</span>
+          </button>
           <a
             [routerLink]="'/patients'"
-            class="btn btn-outline-secondary form-control"
-            >Cancel</a
-          >
+            mat-stroked-button
+            class="flex-1 h-12 flex items-center justify-center">
+            <mat-icon>cancel</mat-icon>
+            <span class="ml-2">{{ 'common.cancel' | translate }}</span>
+          </a>
         </div>
-      </div>
-    </form>
+      </form>
+    </div>
   </div>
-  <div class="col-md-2"></div>
 </div>

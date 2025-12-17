@@ -7,4 +7,7 @@ export interface PatientVisits {
   treatmentCost: number;
   onDutyDrName: string;
   visitDate: string | Date;
+  insuranceCoveragePercentage?: number | null;
+  insuranceCoveredAmount?: number | null;
+  patientPaidAmount?: number | null;
 }

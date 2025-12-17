@@ -1,104 +1,149 @@
-<div class="row flex justify-between">
-  <div class="col"><h4 class="fw-bold p-3">All Patients</h4></div>
-  <!-- <h1 class="fw-bold p-3">All Patients</h1> -->
-  <div class="col d-flex flex-column align-items-end">
-    <a class="text-decoration-none" [routerLink]="'/patients/new'"
-      ><h5 class="fw-bold p-3">New Patient</h5></a
-    >
-  </div>
-</div>
-
-<div class="row">
-  <div class="col-12">
-    <input
-      #searchKeyword
-      (keyup)="searchByKeyword(searchKeyword.value)"
-      type="text"
-      class="border-1 w-100 my-3 p-2 px-4 rounded-2"
-      id="searchKeyword"
-      name="searchKeyword"
-      placeholder="Search for Patient"
-    />
-  </div>
-</div>
-
-<div class="container text-center">
-  <div class="row">
-    <div class="grid grid-cols-4">
-      @for (patient of (patients$ | async); track patient) {
-      <div class="card p-3 mb-3" style="width: 18rem">
-        <div class="text-center">
-          <div
-            class="rounded-full bg-blue-400 text-4xl w-24 h-24 inline-flex items-center justify-center font-bold text-white"
-          >
-            {{ patient.name[0] | uppercase }}
-          </div>
-          <div class="card-body fw-bold">
-            {{ patient.name }}
-          </div>
-        </div>
-        <mat-divider class="mb-3"></mat-divider>
-        <div
-          class="flex flex-row-reverse gap-2 justify-center items-center mb-2"
-        >
-          <p>{{ patient.address }}</p>
-          <mat-icon matPrefix>location_on</mat-icon>
-        </div>
-        <div
-          class="flex flex-row-reverse gap-2 justify-center items-center mb-2"
-        >
-          <p>{{ patient.age }}</p>
-          <mat-icon matPrefix>history</mat-icon>
-        </div>
-        <div
-          class="flex flex-row-reverse gap-2 justify-center items-center mb-2"
-        >
-          <p>{{ patient.phoneNumber }}</p>
-          <mat-icon matPrefix>phone_iphone</mat-icon>
-        </div>
-        <mat-divider class="mb-3"></mat-divider>
-        <div
-          class="flex flex-row-reverse gap-2 justify-center items-center mb-2"
-        >
-          @if(patient.bloodSuger){
-          <p>Blood Sugar: Yes</p>
-          }@else {
-          <p>Blood Sugar: No</p>
-          }
-        </div>
-        <div
-          class="flex flex-row-reverse gap-2 justify-center items-center mb-2"
-        >
-          @if(patient.bloodPressure){
-          <p>Blood pressure: Yes</p>
-          }@else {
-          <p>Blood pressure: No</p>
-          }
-        </div>
-        <div
-          class="flex flex-row-reverse gap-2 justify-center items-center mb-2"
-        >
-          @if(patient.allergy){
-          <p>Blood allergy: Yes</p>
-          }@else {
-          <p>Blood allergy: No</p>
-          }
-        </div>
-        <mat-divider></mat-divider>
-        <div class="card-body flex flex-row gap-5 justify-center items-center">
-          <a [routerLink]="['/patients/edit/' + patient.id]" class="card-link">
-            <mat-icon>edit</mat-icon>
-          </a>
-          <button (click)="deletePatient(patient.id)" class="card-link">
-            <mat-icon>delete</mat-icon>
-          </button>
-          <a [routerLink]="['/patient-visits/' + patient.id]" class="card-link">
-            <mat-icon>history_2</mat-icon>
-          </a>
-        </div>
-      </div>
-      }
+<div class="flex flex-col pt-8 min-h-screen">
+  <div class="container mx-auto px-4">
+    <!-- Header Section -->
+    <div class="flex flex-col md:flex-row justify-between items-center mb-6">
+      <h1 class="text-3xl font-bold text-gray-800 mb-4 md:mb-0">
+        {{ 'patient.allPatients' | translate }}
+      </h1>
+      <a 
+        [routerLink]="'/patients/new'"
+        class="inline-flex items-center gap-2 bg-blue-600 hover:bg-blue-700 text-white font-semibold py-2 px-4 rounded-lg shadow-md transition-colors">
+        <mat-icon>add</mat-icon>
+        {{ 'patient.addPatient' | translate }}
+      </a>
     </div>
+
+    <!-- Search Bar -->
+    <div class="mb-6">
+      <mat-form-field appearance="outline" class="w-full">
+        <mat-label>{{ 'patient.searchPlaceholder' | translate }}</mat-label>
+        <input
+          matInput
+          #searchKeyword
+          (keyup)="searchByKeyword(searchKeyword.value)"
+          type="text"
+          id="searchKeyword"
+          name="searchKeyword"
+          [placeholder]="'patient.searchPlaceholder' | translate"
+        />
+        <mat-icon matPrefix>search</mat-icon>
+      </mat-form-field>
+    </div>
+
+    <!-- Patients Grid -->
+    @if(patients$ | async; as patients) {
+      @if(patients.length === 0) {
+        <div class="text-center py-12">
+          <mat-icon class="text-6xl text-gray-400 mb-4">personal_injury</mat-icon>
+          <p class="text-xl text-gray-600">{{ 'patient.noPatients' | translate }}</p>
+        </div>
+      } @else {
+        <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6">
+          @for (patient of patients; track patient.id) {
+            <div class="patient-card bg-white rounded-lg shadow-lg hover:shadow-xl transition-all duration-300 overflow-hidden">
+              <!-- Card Header with Avatar -->
+              <div class="bg-gradient-to-br from-blue-500 to-blue-600 p-6 text-center">
+                <div class="rounded-full bg-white bg-opacity-90 text-5xl w-24 h-24 inline-flex items-center justify-center font-bold text-blue-600 mb-3">
+                  {{ patient.name[0] | uppercase }}
+                </div>
+                <h3 class="text-xl font-bold text-white mt-3">{{ patient.name }}</h3>
+              </div>
+
+              <!-- Card Body -->
+              <div class="p-6">
+                <!-- Patient Info -->
+                <div class="space-y-3 mb-4">
+                  @if(patient.address) {
+                    <div class="flex items-center gap-2 text-gray-700">
+                      <mat-icon class="text-blue-500">location_on</mat-icon>
+                      <span class="text-sm">{{ patient.address }}</span>
+                    </div>
+                  }
+                  @if(patient.age) {
+                    <div class="flex items-center gap-2 text-gray-700">
+                      <mat-icon class="text-blue-500">cake</mat-icon>
+                      <span class="text-sm">{{ patient.age }} {{ 'common.years' | translate }}</span>
+                    </div>
+                  }
+                  @if(patient.phoneNumber) {
+                    <div class="flex items-center gap-2 text-gray-700">
+                      <mat-icon class="text-blue-500">phone</mat-icon>
+                      <span class="text-sm">{{ patient.phoneNumber }}</span>
+                    </div>
+                  }
+                  @if(patient.insuranceCompanyName) {
+                    <div class="flex items-center gap-2 text-gray-700">
+                      <mat-icon class="text-blue-500">business</mat-icon>
+                      <span class="text-sm">{{ patient.insuranceCompanyName }}</span>
+                    </div>
+                  }
+                  @if(patient.insurancePolicyNumber) {
+                    <div class="flex items-center gap-2 text-gray-700">
+                      <mat-icon class="text-blue-500">badge</mat-icon>
+                      <span class="text-sm">{{ patient.insurancePolicyNumber }}</span>
+                    </div>
+                  }
+                </div>
+
+                <mat-divider class="my-4"></mat-divider>
+
+                <!-- Medical Conditions -->
+                <div class="space-y-2 mb-4">
+                  <div class="flex items-center justify-between">
+                    <span class="text-sm text-gray-600">{{ 'patient.bloodSugar' | translate }}</span>
+                    <span class="text-sm font-semibold" [class.text-green-600]="patient.bloodSuger" [class.text-gray-400]="!patient.bloodSuger">
+                      {{ patient.bloodSuger ? ('common.yes' | translate) : ('common.no' | translate) }}
+                    </span>
+                  </div>
+                  <div class="flex items-center justify-between">
+                    <span class="text-sm text-gray-600">{{ 'patient.bloodPressure' | translate }}</span>
+                    <span class="text-sm font-semibold" [class.text-green-600]="patient.bloodPressure" [class.text-gray-400]="!patient.bloodPressure">
+                      {{ patient.bloodPressure ? ('common.yes' | translate) : ('common.no' | translate) }}
+                    </span>
+                  </div>
+                  <div class="flex items-center justify-between">
+                    <span class="text-sm text-gray-600">{{ 'patient.allergy' | translate }}</span>
+                    <span class="text-sm font-semibold" [class.text-red-600]="patient.allergy" [class.text-gray-400]="!patient.allergy">
+                      {{ patient.allergy ? ('common.yes' | translate) : ('common.no' | translate) }}
+                    </span>
+                  </div>
+                </div>
+
+                <mat-divider class="my-4"></mat-divider>
+
+                <!-- Action Buttons -->
+                <div class="flex gap-2 justify-center items-center pt-2">
+                  <a 
+                    [routerLink]="['/patients/edit/' + patient.id]" 
+                    class="action-btn edit-btn"
+                    [title]="'patient.editPatient' | translate">
+                    <mat-icon>edit</mat-icon>
+                  </a>
+                  <button 
+                    (click)="deletePatient(patient.id)" 
+                    class="action-btn delete-btn"
+                    [title]="'patient.deletePatient' | translate">
+                    <mat-icon>delete</mat-icon>
+                  </button>
+                  <a 
+                    [routerLink]="['/patient-visits/' + patient.id]" 
+                    class="action-btn visits-btn"
+                    [title]="'patient.viewVisits' | translate">
+                    <mat-icon>history</mat-icon>
+                  </a>
+                  <a 
+                    [routerLink]="['/patient-exams/' + patient.id]" 
+                    class="action-btn exams-btn"
+                    [title]="'patient.viewExams' | translate">
+                    <mat-icon>medical_services</mat-icon>
+                  </a>
+                </div>
+              </div>
+            </div>
+          }
+        </div>
+      }
+    }
   </div>
 </div>
 

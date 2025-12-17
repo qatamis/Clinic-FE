@@ -1,0 +1,54 @@
+<div class="bg-white rounded-lg shadow-lg p-6">
+  <!-- Calendar Header -->
+  <div class="flex items-center justify-between mb-6">
+    <button mat-icon-button (click)="previousMonth()">
+      <mat-icon>chevron_left</mat-icon>
+    </button>
+    <h2 class="text-2xl font-bold text-gray-800">
+      {{ getMonthName() }} {{ currentYear }}
+    </h2>
+    <button mat-icon-button (click)="nextMonth()">
+      <mat-icon>chevron_right</mat-icon>
+    </button>
+  </div>
+
+  <!-- Week Days Header -->
+  <div class="grid grid-cols-7 gap-2 mb-2">
+    @for (day of weekDays; track day) {
+      <div class="text-center font-semibold text-gray-600 py-2">
+        {{ day }}
+      </div>
+    }
+  </div>
+
+  <!-- Calendar Grid -->
+  <div class="grid grid-cols-7 gap-2">
+    @for (date of daysInMonth; track date.getTime()) {
+      <div 
+        class="min-h-24 border border-gray-200 rounded-lg p-2 cursor-pointer hover:bg-gray-50 transition-colors
+               {{ isCurrentMonth(date) ? 'bg-white' : 'bg-gray-50' }}
+               {{ isToday(date) ? 'ring-2 ring-pink-500' : '' }}">
+        <!-- Date Number -->
+        <div class="text-sm font-semibold mb-1 {{ isCurrentMonth(date) ? 'text-gray-800' : 'text-gray-400' }}">
+          {{ date.getDate() }}
+        </div>
+
+        <!-- Appointments for this date -->
+        <div class="space-y-1">
+          @for (apt of getAppointmentsForDate(date); track apt.id) {
+            <div 
+              [class]="'text-xs p-1 rounded truncate text-white ' + getStatusColor(apt.status)"
+              [title]="apt.patientName + ' - ' + (apt.appointmentDate | date:'shortTime')"
+              [attr.data-status]="apt.status"
+              style="display: block !important; min-height: 20px; color: white !important;">
+              <a [routerLink]="'/appointments/view/' + apt.id" class="text-white no-underline hover:underline block" style="color: white !important;">
+                {{ apt.patientName }}
+              </a>
+            </div>
+          }
+        </div>
+      </div>
+    }
+  </div>
+</div>
+

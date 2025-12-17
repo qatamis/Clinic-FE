@@ -20,7 +20,11 @@ export class PatientVisitsService {
     return this.http.get<PatientVisits[]>(`${this.apiUrl}patientvisits/` + id);
   }
 
-  getVisitsByPatientId(id: number): Observable<PatientVisits> {
-    return this.http.get<PatientVisits>(`${this.apiUrl}patientvisits/` + 'patient/' + id);
+  getVisitsByPatientId(id: number): Observable<PatientVisits[]> {
+    return this.http.get<PatientVisits[]>(`${this.apiUrl}patientvisits/` + 'patient/' + id);
+  }
+  
+  getVisitById(id: number): Observable<PatientVisits[]> {
+    return this.http.get<PatientVisits[]>(`${this.apiUrl}patientvisits/patient/` + id);
   }
 }

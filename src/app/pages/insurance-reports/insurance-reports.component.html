@@ -1,0 +1,109 @@
+<div class="flex flex-col pt-8 min-h-screen">
+  <div class="container mx-auto px-4">
+    <!-- Header -->
+    <div class="mb-6">
+      <h1 class="text-3xl font-bold text-gray-800 mb-2">{{ 'reports.insuranceReports' | translate }}</h1>
+      <p class="text-gray-600">{{ 'reports.insuranceReportsDescription' | translate }}</p>
+    </div>
+
+    <!-- Filter Section -->
+    <div class="bg-white rounded-lg shadow-lg p-6 mb-6">
+      <div class="flex flex-col md:flex-row gap-4 items-end">
+        <div class="flex items-center gap-2">
+          <input
+            type="checkbox"
+            id="filterByDateRange"
+            [(ngModel)]="filterByDateRange"
+            (change)="onFilterChange()"
+            class="w-4 h-4">
+          <label for="filterByDateRange" class="text-sm text-gray-700">{{ 'reports.filterByDateRange' | translate }}</label>
+        </div>
+
+        @if(filterByDateRange) {
+          <mat-form-field appearance="outline" class="w-full md:w-64">
+            <mat-label>{{ 'dashboard.startDate' | translate }}</mat-label>
+            <input matInput [matDatepicker]="startPicker" [(ngModel)]="startDate">
+            <mat-datepicker-toggle matSuffix [for]="startPicker"></mat-datepicker-toggle>
+            <mat-datepicker #startPicker></mat-datepicker>
+          </mat-form-field>
+          
+          <mat-form-field appearance="outline" class="w-full md:w-64">
+            <mat-label>{{ 'dashboard.endDate' | translate }}</mat-label>
+            <input matInput [matDatepicker]="endPicker" [(ngModel)]="endDate">
+            <mat-datepicker-toggle matSuffix [for]="endPicker"></mat-datepicker-toggle>
+            <mat-datepicker #endPicker></mat-datepicker>
+          </mat-form-field>
+          
+          <button 
+            mat-raised-button 
+            color="primary" 
+            (click)="applyDateFilter()"
+            [disabled]="!startDate || !endDate || loading"
+            class="h-12">
+            <mat-icon>search</mat-icon>
+            <span class="ml-2">{{ 'common.search' | translate }}</span>
+          </button>
+        }
+      </div>
+    </div>
+
+    <!-- Statistics Cards -->
+    @if(loading) {
+      <div class="text-center py-12">
+        <mat-icon class="text-6xl text-gray-400 mb-4 animate-spin">cached</mat-icon>
+        <p class="text-xl text-gray-600">{{ 'dashboard.loading' | translate }}...</p>
+      </div>
+    } @else if(insuranceStats.length === 0) {
+      <div class="text-center py-12">
+        <mat-icon class="text-6xl text-gray-400 mb-4">business</mat-icon>
+        <p class="text-xl text-gray-600">{{ 'reports.noInsuranceData' | translate }}</p>
+      </div>
+    } @else {
+      <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+        @for (stat of insuranceStats; track stat.insuranceCompanyId) {
+          <div class="bg-white rounded-lg shadow-lg hover:shadow-xl transition-all duration-300 overflow-hidden">
+            <!-- Card Header -->
+            <div class="bg-gradient-to-br from-indigo-500 to-indigo-600 p-6 text-center">
+              <div class="rounded-full bg-white bg-opacity-90 text-5xl w-24 h-24 inline-flex items-center justify-center font-bold text-indigo-600 mb-3">
+                <mat-icon class="text-5xl">business</mat-icon>
+              </div>
+              <h3 class="text-xl font-bold text-white mt-3">{{ stat.insuranceCompanyName }}</h3>
+            </div>
+
+            <!-- Card Body -->
+            <div class="p-6">
+              <div class="space-y-4">
+                <!-- Total Visits -->
+                <div class="flex items-center justify-between">
+                  <span class="text-gray-600">{{ 'reports.totalVisits' | translate }}</span>
+                  <span class="font-semibold text-gray-800">{{ stat.totalVisits }}</span>
+                </div>
+
+                <div class="border-t border-gray-200"></div>
+
+                <!-- Total Treatment Cost -->
+                <div class="flex items-center justify-between">
+                  <span class="text-gray-600">{{ 'reports.totalTreatmentCost' | translate }}</span>
+                  <span class="font-semibold text-blue-600">{{ stat.totalTreatmentCost | number:'1.2-2' }} {{ 'dashboard.currency' | translate }}</span>
+                </div>
+
+                <!-- Insurance Covered -->
+                <div class="flex items-center justify-between">
+                  <span class="text-gray-600">{{ 'reports.totalInsuranceCovered' | translate }}</span>
+                  <span class="font-semibold text-indigo-600">{{ stat.totalInsuranceCovered | number:'1.2-2' }} {{ 'dashboard.currency' | translate }}</span>
+                </div>
+
+                <!-- Patient Paid -->
+                <div class="flex items-center justify-between">
+                  <span class="text-gray-600">{{ 'reports.totalPatientPaid' | translate }}</span>
+                  <span class="font-semibold text-green-600">{{ stat.totalPatientPaid | number:'1.2-2' }} {{ 'dashboard.currency' | translate }}</span>
+                </div>
+              </div>
+            </div>
+          </div>
+        }
+      </div>
+    }
+  </div>
+</div>
+

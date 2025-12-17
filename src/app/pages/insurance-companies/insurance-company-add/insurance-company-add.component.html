@@ -1,0 +1,142 @@
+<div class="flex flex-col pt-8 min-h-screen">
+  <div class="container mx-auto px-4 max-w-4xl">
+    <!-- Header -->
+    <div class="mb-6">
+      <h1 class="text-3xl font-bold text-gray-800 mb-2">{{ 'insurance.addCompany' | translate }}</h1>
+      <p class="text-gray-600">{{ 'insurance.addCompanyDescription' | translate }}</p>
+    </div>
+
+    <!-- Form Card -->
+    <div class="bg-white rounded-lg shadow-lg p-6 md:p-8">
+      <form
+        #form="ngForm"
+        (ngSubmit)="onSubmit()"
+        class="space-y-4"
+      >
+        <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+          <!-- Name -->
+          <mat-form-field appearance="outline" class="w-full">
+            <mat-label>{{ 'insurance.name' | translate }}</mat-label>
+            <input
+              matInput
+              type="text"
+              id="name"
+              name="name"
+              [(ngModel)]="newCompany.name"
+              required
+            />
+            <mat-icon matPrefix>business</mat-icon>
+          </mat-form-field>
+
+          <!-- Code -->
+          <mat-form-field appearance="outline" class="w-full">
+            <mat-label>{{ 'insurance.code' | translate }} ({{ 'common.optional' | translate }})</mat-label>
+            <input
+              matInput
+              type="text"
+              id="code"
+              name="code"
+              [(ngModel)]="newCompany.code"
+            />
+            <mat-icon matPrefix>tag</mat-icon>
+          </mat-form-field>
+
+          <!-- Contact Person -->
+          <mat-form-field appearance="outline" class="w-full">
+            <mat-label>{{ 'insurance.contactPerson' | translate }} ({{ 'common.optional' | translate }})</mat-label>
+            <input
+              matInput
+              type="text"
+              id="contactPerson"
+              name="contactPerson"
+              [(ngModel)]="newCompany.contactPerson"
+            />
+            <mat-icon matPrefix>person</mat-icon>
+          </mat-form-field>
+
+          <!-- Email -->
+          <mat-form-field appearance="outline" class="w-full">
+            <mat-label>{{ 'insurance.email' | translate }} ({{ 'common.optional' | translate }})</mat-label>
+            <input
+              matInput
+              type="email"
+              id="email"
+              name="email"
+              [(ngModel)]="newCompany.email"
+            />
+            <mat-icon matPrefix>email</mat-icon>
+          </mat-form-field>
+
+          <!-- Phone Number -->
+          <mat-form-field appearance="outline" class="w-full">
+            <mat-label>{{ 'insurance.phoneNumber' | translate }} ({{ 'common.optional' | translate }})</mat-label>
+            <input
+              matInput
+              type="text"
+              id="phoneNumber"
+              name="phoneNumber"
+              [(ngModel)]="newCompany.phoneNumber"
+            />
+            <mat-icon matPrefix>phone</mat-icon>
+          </mat-form-field>
+        </div>
+
+        <!-- Address -->
+        <mat-form-field appearance="outline" class="w-full">
+          <mat-label>{{ 'insurance.address' | translate }} ({{ 'common.optional' | translate }})</mat-label>
+          <textarea
+            matInput
+            id="address"
+            name="address"
+            rows="3"
+            [(ngModel)]="newCompany.address"
+          ></textarea>
+          <mat-icon matPrefix>location_on</mat-icon>
+        </mat-form-field>
+
+        <!-- Notes -->
+        <mat-form-field appearance="outline" class="w-full">
+          <mat-label>{{ 'insurance.notes' | translate }} ({{ 'common.optional' | translate }})</mat-label>
+          <textarea
+            matInput
+            id="notes"
+            name="notes"
+            rows="3"
+            [(ngModel)]="newCompany.notes"
+          ></textarea>
+          <mat-icon matPrefix>note</mat-icon>
+        </mat-form-field>
+
+        <!-- Is Active -->
+        <div class="flex items-center">
+          <mat-checkbox [(ngModel)]="newCompany.isActive" name="isActive" class="mr-2">
+            {{ 'insurance.isActive' | translate }}
+          </mat-checkbox>
+        </div>
+
+        <mat-divider class="my-4"></mat-divider>
+
+        <!-- Action Buttons -->
+        <div class="flex flex-col sm:flex-row gap-4 pt-4">
+          <button
+            type="submit"
+            mat-raised-button
+            color="primary"
+            [disabled]="!form.valid"
+            class="flex-1 h-12">
+            <mat-icon>save</mat-icon>
+            <span class="ml-2">{{ 'common.save' | translate }}</span>
+          </button>
+          <a
+            [routerLink]="'/insurance-companies'"
+            mat-stroked-button
+            class="flex-1 h-12 flex items-center justify-center">
+            <mat-icon>cancel</mat-icon>
+            <span class="ml-2">{{ 'common.cancel' | translate }}</span>
+          </a>
+        </div>
+      </form>
+    </div>
+  </div>
+</div>
+

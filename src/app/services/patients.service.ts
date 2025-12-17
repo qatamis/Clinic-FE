@@ -24,7 +24,7 @@ export class PatientsService {
   }
 
   getPatientBySearchKeyword(searchKeyword: string = ''): Observable<Patient[]> {
-    return this.http.get<Patient[]>(`${this.apiUrl}Patients/` + searchKeyword);
+    return this.http.get<Patient[]>(`${this.apiUrl}Patients/search/` + searchKeyword);
   }
 
   addPatient(newProduct: Patient): Observable<Patient> {

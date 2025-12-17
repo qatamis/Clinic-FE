@@ -1,0 +1,51 @@
+/* patient-exam-edit.component.css */
+.container {
+  padding-top: 2rem;
+  padding-bottom: 2rem;
+}
+
+.max-w-2xl {
+  max-width: 42rem; /* Equivalent to Tailwind's max-w-2xl */
+}
+
+.mx-auto {
+  margin-left: auto;
+  margin-right: auto;
+}
+
+.shadow-lg {
+  box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.1), 0 4px 6px -2px rgba(0, 0, 0, 0.05);
+}
+
+.rounded-lg {
+  border-radius: 0.5rem;
+}
+
+.p-8 {
+  padding: 2rem;
+}
+
+.space-y-6 > :not([hidden]) ~ :not([hidden]) {
+  margin-top: 1.5rem;
+}
+
+.w-full {
+  width: 100%;
+}
+
+.flex {
+  display: flex;
+}
+
+.justify-end {
+  justify-content: flex-end;
+}
+
+.mt-6 {
+  margin-top: 1.5rem;
+}
+
+mat-form-field {
+  width: 100%;
+}
+

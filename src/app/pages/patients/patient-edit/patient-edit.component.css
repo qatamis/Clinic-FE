@@ -1,0 +1,26 @@
+/* Patient Edit Component Styles */
+
+mat-form-field {
+  width: 100%;
+}
+
+/* Ensure buttons are properly styled */
+button[mat-raised-button],
+a[mat-stroked-button] {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+/* Checkbox styling */
+mat-checkbox {
+  display: block;
+}
+
+/* Responsive adjustments */
+@media (max-width: 768px) {
+  .container {
+    padding: 1rem;
+  }
+}
+

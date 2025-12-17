@@ -1,0 +1,88 @@
+<div class="container mx-auto px-4 pt-8 min-h-screen">
+  <!-- Header with Add Exam Button -->
+  <div class="flex justify-between items-center mb-6">
+    <h1 class="text-3xl font-bold text-gray-800">{{ 'exam.title' | translate }}</h1>
+    <a [routerLink]="'/patient-exams/add/' + this.IDnumber">
+      <button mat-raised-button color="primary" class="add-exam-btn">
+        <mat-icon>add</mat-icon>
+        {{ 'exam.addExam' | translate }}
+      </button>
+    </a>
+  </div>
+
+  <!-- Exam Cards Grid -->
+  @if(exams.length === 0) {
+    <div class="text-center py-10">
+      <mat-icon class="text-6xl text-gray-400 mb-4">assignment</mat-icon>
+      <p class="text-xl text-gray-600">{{ 'exam.noExams' | translate }}</p>
+    </div>
+  } @else {
+    <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+      @for (exam of exams; track exam.id) {
+        <div class="exam-card bg-white rounded-lg shadow-lg hover:shadow-xl transition-all duration-300 overflow-hidden">
+          <!-- Card Header with Icon -->
+          <div class="bg-gradient-to-br from-orange-500 to-orange-600 p-6 text-center relative">
+            <div class="rounded-full bg-white bg-opacity-90 text-5xl w-24 h-24 inline-flex items-center justify-center font-bold text-orange-600 mb-3">
+              <mat-icon class="text-5xl">assignment</mat-icon>
+            </div>
+            <h3 class="text-xl font-bold text-white mt-3">{{ 'exam.exam' | translate }} #{{ exam.id }}</h3>
+          </div>
+
+          <!-- Card Body with Details -->
+          <div class="p-6">
+            <div class="space-y-3 mb-4">
+              @if(exam.examType) {
+                <div class="flex items-center gap-2 text-gray-700">
+                  <mat-icon class="text-orange-500 text-lg">category</mat-icon>
+                  <span class="text-sm font-semibold">{{ exam.examType }}</span>
+                </div>
+              }
+              @if(exam.doctorName) {
+                <div class="flex items-center gap-2 text-gray-700">
+                  <mat-icon class="text-orange-500 text-lg">medical_services</mat-icon>
+                  <span class="text-sm">{{ exam.doctorName }}</span>
+                </div>
+              }
+              <div class="flex items-center gap-2 text-gray-700">
+                <mat-icon class="text-orange-500 text-lg">calendar_today</mat-icon>
+                <span class="text-sm">{{ exam.examDate | date }}</span>
+              </div>
+              @if(exam.documentFileName) {
+                <div class="flex items-center gap-2 text-gray-700">
+                  <mat-icon class="text-orange-500 text-lg">description</mat-icon>
+                  <span class="text-sm">{{ 'exam.document' | translate }}</span>
+                </div>
+              }
+            </div>
+
+            <mat-divider class="my-4"></mat-divider>
+
+            <!-- Actions -->
+            <div class="flex justify-around items-center gap-2">
+              @if(exam.documentFileName) {
+                <button 
+                  (click)="viewDocument(exam.id, exam.documentFileName)"
+                  class="action-btn view-doc-btn" 
+                  [title]="'exam.viewDocument' | translate">
+                  <mat-icon>visibility</mat-icon>
+                </button>
+                <button 
+                  (click)="downloadDocument(exam.id, exam.documentFileName)"
+                  class="action-btn download-btn" 
+                  [title]="'exam.downloadDocument' | translate">
+                  <mat-icon>download</mat-icon>
+                </button>
+              }
+              <a [routerLink]="'/patient-exams/edit/' + exam.id" class="action-btn edit-btn" [title]="'common.edit' | translate">
+                <mat-icon>edit</mat-icon>
+              </a>
+              <button (click)="deleteExam(exam.id)" class="action-btn delete-btn" [title]="'common.delete' | translate">
+                <mat-icon>delete</mat-icon>
+              </button>
+            </div>
+          </div>
+        </div>
+      }
+    </div>
+  }
+</div>

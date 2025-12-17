@@ -7,4 +7,7 @@ export interface Patient {
   bloodSuger: boolean;
   bloodPressure: boolean;
   allergy: boolean;
+  insuranceCompanyId?: number | null;
+  insuranceCompanyName?: string | null;
+  insurancePolicyNumber?: string | null;
 }

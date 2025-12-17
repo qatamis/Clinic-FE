@@ -1,0 +1,235 @@
+<div class="flex flex-col pt-8 min-h-screen">
+  <div class="container mx-auto px-4">
+    <!-- Header Section -->
+    <div class="flex flex-col md:flex-row justify-between items-center mb-6">
+      <h1 class="text-3xl font-bold text-gray-800 mb-4 md:mb-0">
+        {{ 'appointments.title' | translate }}
+      </h1>
+      <div class="flex gap-2">
+        <button
+          mat-raised-button
+          color="primary"
+          (click)="toggleView()"
+          class="h-12">
+          <mat-icon>{{ viewMode === 'list' ? 'calendar_view_month' : 'list' }}</mat-icon>
+          <span class="ml-2">{{ viewMode === 'list' ? ('appointments.calendarView' | translate) : ('appointments.listView' | translate) }}</span>
+        </button>
+        <a 
+          [routerLink]="'/appointments/new'"
+          mat-raised-button
+          color="primary"
+          class="h-12">
+          <mat-icon>add</mat-icon>
+          <span class="ml-2">{{ 'appointments.addAppointment' | translate }}</span>
+        </a>
+      </div>
+    </div>
+
+    <!-- Filters Section -->
+    <div class="bg-white rounded-lg shadow-lg p-6 mb-6">
+      <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4">
+        <!-- Search -->
+        <mat-form-field appearance="outline" class="w-full">
+          <mat-label>{{ 'appointments.search' | translate }}</mat-label>
+          <input
+            matInput
+            [(ngModel)]="searchKeyword"
+            (ngModelChange)="onSearchChange()"
+            [placeholder]="'appointments.searchPlaceholder' | translate"
+          />
+          <mat-icon matPrefix>search</mat-icon>
+        </mat-form-field>
+
+        <!-- Status Filter -->
+        <mat-form-field appearance="outline" class="w-full">
+          <mat-label>{{ 'appointments.status' | translate }}</mat-label>
+          <mat-select [(ngModel)]="selectedStatus" (selectionChange)="onFilterChange()">
+            <mat-option value="">{{ 'appointments.allStatuses' | translate }}</mat-option>
+            @for (status of statuses; track status) {
+              <mat-option [value]="status">{{ status }}</mat-option>
+            }
+          </mat-select>
+          <mat-icon matPrefix>filter_list</mat-icon>
+        </mat-form-field>
+
+        <!-- Doctor Filter -->
+        <mat-form-field appearance="outline" class="w-full">
+          <mat-label>{{ 'appointments.doctor' | translate }}</mat-label>
+          <mat-select [(ngModel)]="selectedDoctorId" (selectionChange)="onFilterChange()">
+            <mat-option [value]="null">{{ 'appointments.allDoctors' | translate }}</mat-option>
+            @for (doctor of doctors; track doctor.id) {
+              <mat-option [value]="doctor.id">{{ doctor.fullName }}</mat-option>
+            }
+          </mat-select>
+          <mat-icon matPrefix>medical_services</mat-icon>
+        </mat-form-field>
+
+        <!-- Patient Filter -->
+        <mat-form-field appearance="outline" class="w-full">
+          <mat-label>{{ 'appointments.patient' | translate }}</mat-label>
+          <mat-select [(ngModel)]="selectedPatientId" (selectionChange)="onFilterChange()">
+            <mat-option [value]="null">{{ 'appointments.allPatients' | translate }}</mat-option>
+            @for (patient of patients; track patient.id) {
+              <mat-option [value]="patient.id">{{ patient.name }}</mat-option>
+            }
+          </mat-select>
+          <mat-icon matPrefix>personal_injury</mat-icon>
+        </mat-form-field>
+      </div>
+
+      <!-- Date Range Filters -->
+      <div class="grid grid-cols-1 md:grid-cols-3 gap-4 mt-4 pt-4 border-t border-gray-200">
+        <mat-form-field appearance="outline" class="w-full">
+          <mat-label>{{ 'dashboard.startDate' | translate }}</mat-label>
+          <input matInput [matDatepicker]="startPicker" [(ngModel)]="startDate" (dateChange)="onFilterChange()">
+          <mat-datepicker-toggle matSuffix [for]="startPicker"></mat-datepicker-toggle>
+          <mat-datepicker #startPicker></mat-datepicker>
+        </mat-form-field>
+        
+        <mat-form-field appearance="outline" class="w-full">
+          <mat-label>{{ 'dashboard.endDate' | translate }}</mat-label>
+          <input matInput [matDatepicker]="endPicker" [(ngModel)]="endDate" (dateChange)="onFilterChange()">
+          <mat-datepicker-toggle matSuffix [for]="endPicker"></mat-datepicker-toggle>
+          <mat-datepicker #endPicker></mat-datepicker>
+        </mat-form-field>
+
+        <button
+          mat-stroked-button
+          (click)="startDate = null; endDate = null; onFilterChange()"
+          class="h-12">
+          <mat-icon>clear</mat-icon>
+          <span class="ml-2">{{ 'common.clear' | translate }}</span>
+        </button>
+      </div>
+    </div>
+
+    <!-- Appointments List -->
+    @if(viewMode === 'list') {
+      @if(loading) {
+        <div class="text-center py-12">
+          <mat-icon class="text-6xl text-gray-400 mb-4 animate-spin">cached</mat-icon>
+          <p class="text-xl text-gray-600">{{ 'dashboard.loading' | translate }}...</p>
+        </div>
+      } @else if(filteredAppointments.length === 0) {
+        <div class="text-center py-12">
+          <mat-icon class="text-6xl text-gray-400 mb-4">event</mat-icon>
+          <p class="text-xl text-gray-600">{{ 'appointments.noAppointments' | translate }}</p>
+        </div>
+      } @else {
+        <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+          @for (appointment of filteredAppointments; track appointment.id) {
+            <div class="bg-white rounded-lg shadow-lg hover:shadow-xl transition-all duration-300 overflow-hidden">
+              <!-- Card Header -->
+              <div class="bg-gradient-to-br from-pink-500 to-pink-600 p-6 text-center">
+                <div class="rounded-full bg-white bg-opacity-90 text-5xl w-24 h-24 inline-flex items-center justify-center font-bold text-pink-600 mb-3">
+                  <mat-icon class="text-5xl">event</mat-icon>
+                </div>
+                <h3 class="text-xl font-bold text-white mt-3">{{ appointment.patientName }}</h3>
+                <p class="text-pink-100 text-sm mt-1">{{ appointment.doctorName }}</p>
+              </div>
+
+              <!-- Card Body -->
+              <div class="p-6">
+                <div class="space-y-3">
+                  <!-- Appointment Date -->
+                  <div class="flex items-center gap-2 text-gray-700">
+                    <mat-icon class="text-pink-500">calendar_today</mat-icon>
+                    <div class="flex-1">
+                      <span class="text-xs text-gray-500">{{ 'appointments.appointmentDate' | translate }}</span>
+                      <p class="text-sm font-semibold">{{ appointment.appointmentDate | date:'medium' }}</p>
+                    </div>
+                  </div>
+
+                  <!-- Duration -->
+                  <div class="flex items-center gap-2 text-gray-700">
+                    <mat-icon class="text-pink-500">schedule</mat-icon>
+                    <div class="flex-1">
+                      <span class="text-xs text-gray-500">{{ 'appointments.duration' | translate }}</span>
+                      <p class="text-sm font-semibold">{{ appointment.duration }} {{ 'appointments.minutes' | translate }}</p>
+                    </div>
+                  </div>
+
+                  <!-- Status -->
+                  <div class="flex items-center gap-2">
+                    <mat-icon class="text-pink-500">info</mat-icon>
+                    <div class="flex-1">
+                      <span class="text-xs text-gray-500">{{ 'appointments.status' | translate }}</span>
+                      <span class="inline-block px-2 py-1 rounded-full text-xs font-semibold {{ getStatusColor(appointment.status) }}">
+                        {{ appointment.status }}
+                      </span>
+                    </div>
+                  </div>
+
+                  <!-- Appointment Type -->
+                  @if(appointment.appointmentType) {
+                    <div class="flex items-center gap-2 text-gray-700">
+                      <mat-icon class="text-pink-500">category</mat-icon>
+                      <div class="flex-1">
+                        <span class="text-xs text-gray-500">{{ 'appointments.appointmentType' | translate }}</span>
+                        <p class="text-sm font-semibold">{{ appointment.appointmentType }}</p>
+                      </div>
+                    </div>
+                  }
+
+                  <!-- Notes -->
+                  @if(appointment.notes) {
+                    <div class="flex items-start gap-2 text-gray-700">
+                      <mat-icon class="text-pink-500 mt-1">notes</mat-icon>
+                      <div class="flex-1">
+                        <span class="text-xs text-gray-500">{{ 'appointments.notes' | translate }}</span>
+                        <p class="text-sm line-clamp-2">{{ appointment.notes }}</p>
+                      </div>
+                    </div>
+                  }
+                </div>
+
+                <!-- Action Buttons -->
+                <div class="mt-4 pt-4 border-t border-gray-200 flex gap-2">
+                  <a
+                    [routerLink]="'/appointments/view/' + appointment.id"
+                    mat-stroked-button
+                    class="flex-1">
+                    <mat-icon>visibility</mat-icon>
+                    <span class="ml-1">{{ 'common.view' | translate }}</span>
+                  </a>
+                  <a
+                    [routerLink]="'/appointments/edit/' + appointment.id"
+                    mat-stroked-button
+                    class="flex-1">
+                    <mat-icon>edit</mat-icon>
+                    <span class="ml-1">{{ 'common.edit' | translate }}</span>
+                  </a>
+                  <button
+                    mat-icon-button
+                    [matMenuTriggerFor]="statusMenu"
+                    class="action-btn">
+                    <mat-icon>more_vert</mat-icon>
+                  </button>
+                  <mat-menu #statusMenu="matMenu">
+                    @for (status of statuses; track status) {
+                      @if(status !== appointment.status) {
+                        <button mat-menu-item (click)="updateStatus(appointment.id, status)">
+                          <mat-icon>check_circle</mat-icon>
+                          <span>{{ 'appointments.setStatus' | translate }}: {{ status }}</span>
+                        </button>
+                      }
+                    }
+                    <mat-divider></mat-divider>
+                    <button mat-menu-item (click)="deleteAppointment(appointment.id)" class="text-red-600">
+                      <mat-icon>delete</mat-icon>
+                      <span>{{ 'common.delete' | translate }}</span>
+                    </button>
+                  </mat-menu>
+                </div>
+              </div>
+            </div>
+          }
+        </div>
+      }
+    } @else {
+      <!-- Calendar View -->
+      <app-appointments-calendar [appointments]="appointments"></app-appointments-calendar>
+    }
+  </div>
+</div>
+

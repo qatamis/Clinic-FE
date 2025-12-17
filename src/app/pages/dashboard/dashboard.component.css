@@ -1,0 +1,84 @@
+/* Dashboard Component Styles */
+
+.stat-card {
+  transition: transform 0.2s ease-in-out;
+}
+
+.stat-card:hover {
+  transform: translateY(-2px);
+}
+
+/* Reduce icon sizes in stat cards */
+.stat-card mat-icon {
+  font-size: 30px !important;
+  width: 30px !important;
+  height: 30px !important;
+}
+
+/* Ensure date picker inputs are full width in grid */
+mat-form-field {
+  width: 100%;
+}
+
+/* Align date fields and button to same height */
+.date-field {
+  display: flex;
+  align-items: baseline;
+  padding-bottom: 1.25rem; /* Match Material form field bottom padding */
+}
+
+.date-field mat-form-field {
+  width: 100%;
+}
+
+.date-field .calculate-btn {
+  width: 100%;
+  height: 56px; /* Match Material form field input height */
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 14px;
+  font-weight: 500;
+  margin-bottom: 0;
+}
+
+/* Ensure form fields have consistent styling */
+mat-form-field.mat-mdc-form-field {
+  margin-bottom: 0;
+}
+
+/* Fix text alignment in form fields */
+mat-form-field .mat-mdc-text-field-wrapper {
+  padding-bottom: 0;
+}
+
+/* Loading spinner animation */
+@keyframes spin {
+  from {
+    transform: rotate(0deg);
+  }
+  to {
+    transform: rotate(360deg);
+  }
+}
+
+.animate-spin {
+  animation: spin 1s linear infinite;
+}
+
+/* Responsive adjustments */
+@media (max-width: 768px) {
+  .stat-card {
+    margin-bottom: 1rem;
+  }
+  
+  .date-field {
+    min-height: auto;
+  }
+  
+  .date-field .calculate-btn {
+    min-height: 48px;
+    margin-top: 0;
+  }
+}
+

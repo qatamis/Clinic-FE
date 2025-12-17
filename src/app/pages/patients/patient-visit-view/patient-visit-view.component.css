@@ -1,0 +1,26 @@
+/* Patient Visit View Component Styles */
+
+mat-form-field {
+  width: 100%;
+}
+
+/* Ensure buttons are properly styled */
+a[mat-stroked-button] {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+/* Read-only field styling */
+input[readonly],
+textarea[readonly] {
+  cursor: default;
+}
+
+/* Responsive adjustments */
+@media (max-width: 768px) {
+  .container {
+    padding: 1rem;
+  }
+}
+

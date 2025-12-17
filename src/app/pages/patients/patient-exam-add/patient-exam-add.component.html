@@ -1,0 +1,81 @@
+<div class="container mx-auto px-4 pt-8 min-h-screen">
+  <div class="max-w-2xl mx-auto bg-white shadow-lg rounded-lg p-8 mb-8">
+    <h1 class="text-3xl font-bold text-gray-800 mb-2">{{ 'exam.addExam' | translate }}</h1>
+    <p class="text-gray-600 mb-6">{{ 'exam.addExamDescription' | translate }}</p>
+
+    <form #form="ngForm" (ngSubmit)="onSubmit()" class="space-y-6">
+      <mat-form-field appearance="outline" class="w-full">
+        <mat-label>{{ 'exam.examDate' | translate }}</mat-label>
+        <input matInput type="date" id="examDate" name="examDate" [(ngModel)]="newExam.examDate" required>
+        <mat-icon matPrefix>calendar_today</mat-icon>
+        @if (form.controls['examDate'].invalid && form.controls['examDate'].touched) {
+          <mat-error>{{ 'validation.required' | translate }}</mat-error>
+        }
+      </mat-form-field>
+
+      <mat-form-field appearance="outline" class="w-full">
+        <mat-label>{{ 'exam.examType' | translate }}</mat-label>
+        <input matInput type="text" id="examType" name="examType" [(ngModel)]="newExam.examType" placeholder="Physical, Lab, X-Ray, etc.">
+        <mat-icon matPrefix>category</mat-icon>
+      </mat-form-field>
+
+      <mat-form-field appearance="outline" class="w-full">
+        <mat-label>{{ 'exam.doctorName' | translate }}</mat-label>
+        <mat-select [(ngModel)]="newExam.doctorName" name="doctorName">
+          <mat-option value="">{{ 'exam.selectDoctor' | translate }}</mat-option>
+          @for (doctor of doctors; track doctor.id) {
+            <mat-option [value]="doctor.fullName">{{ doctor.fullName }}</mat-option>
+          }
+        </mat-select>
+        <mat-icon matPrefix>medical_services</mat-icon>
+      </mat-form-field>
+
+      <mat-form-field appearance="outline" class="w-full">
+        <mat-label>{{ 'exam.examResults' | translate }}</mat-label>
+        <textarea matInput id="examResults" name="examResults" rows="4" [(ngModel)]="newExam.examResults"></textarea>
+        <mat-icon matPrefix>description</mat-icon>
+      </mat-form-field>
+
+      <mat-form-field appearance="outline" class="w-full">
+        <mat-label>{{ 'exam.notes' | translate }}</mat-label>
+        <textarea matInput id="notes" name="notes" rows="3" [(ngModel)]="newExam.notes"></textarea>
+        <mat-icon matPrefix>note</mat-icon>
+      </mat-form-field>
+
+      <div class="mb-4">
+        <label for="document" class="block text-sm font-medium text-gray-700 mb-2">
+          {{ 'exam.document' | translate }} ({{ 'common.optional' | translate }})
+        </label>
+        <div class="flex items-center gap-4">
+          <input
+            type="file"
+            class="block w-full text-sm text-gray-500 file:mr-4 file:py-2 file:px-4 file:rounded-md file:border-0 file:text-sm file:font-semibold file:bg-orange-50 file:text-orange-700 hover:file:bg-orange-100"
+            id="document"
+            name="document"
+            accept=".pdf"
+            (change)="onFileSelected($event)"
+          />
+        </div>
+        @if(selectedFile) {
+          <p class="mt-2 text-sm text-gray-600">
+            <mat-icon class="text-orange-500 text-sm align-middle">check_circle</mat-icon>
+            {{ 'common.selected' | translate }}: {{ selectedFile.name }}
+          </p>
+        }
+      </div>
+
+      <mat-divider></mat-divider>
+
+      <div class="flex gap-4 justify-end mt-6">
+        <button mat-stroked-button color="warn" type="button" [routerLink]="'/patient-exams/' + patientId">
+          <mat-icon>cancel</mat-icon>
+          {{ 'common.cancel' | translate }}
+        </button>
+        <button mat-raised-button color="primary" type="submit" [disabled]="form.invalid">
+          <mat-icon>save</mat-icon>
+          {{ 'common.save' | translate }}
+        </button>
+      </div>
+    </form>
+  </div>
+</div>

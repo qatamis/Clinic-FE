@@ -1,27 +1,231 @@
-<div class="flex item-center flex-col pt-28 h-screen">
-  <div class="h-screen">
-    <h1 class="text-3xl text-center font-bold my-10">
-      Welcom to
-      <span class="text-4xl text-blue-800">Dr. Ayman Clinic</span>
+<div class="flex flex-col pt-8 min-h-screen">
+  <div class="container mx-auto px-4">
+    <h1 class="text-3xl text-center font-bold my-6">
+      {{ 'dashboard.welcome' | translate }}
+      <span class="text-4xl text-blue-800">{{ 'dashboard.clinicName' | translate }}</span>
     </h1>
-    <div class="flex flex-col items-center gap-5 justify-center">
-      @if(authService.getUserDetail()) {
-      <h1 class="text-2xl">
-        You are logged in as
-        <span class="font-bold bg-blue-600 rounded-md p-2 text-white">{{
-          authService.getUserDetail()?.fullName
-        }}</span>
-      </h1>
-      }@else {
-      <h1 class="text-2xl">You are not Logged In</h1>
-      <a routerLink="/login">
-        <button
-          class="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded-md"
-        >
-          Login
-        </button>
-      </a>
+    
+    @if(authService.getUserDetail()) {
+      <div class="text-center mb-8">
+        <h2 class="text-xl text-gray-600">
+          {{ 'dashboard.loggedInAs' | translate }}
+          <span class="font-bold bg-blue-600 rounded-md px-3 py-1 text-white">{{
+            authService.getUserDetail()?.fullName
+          }}</span>
+        </h2>
+      </div>
+    }@else {
+      <div class="text-center mb-8">
+        <h2 class="text-2xl mb-4">{{ 'dashboard.notLoggedIn' | translate }}</h2>
+        <a routerLink="/login">
+          <button
+            class="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded-md"
+          >
+            {{ 'auth.login' | translate }}
+          </button>
+        </a>
+      </div>
+    }
+
+    @if(loading) {
+      <div class="text-center py-8">
+        <p class="text-gray-600">{{ 'dashboard.loading' | translate }}</p>
+      </div>
+    } @else if(statistics) {
+      <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6 mb-8">
+        <!-- Total Patients -->
+        <div class="stat-card bg-gradient-to-br from-blue-500 to-blue-600 text-white rounded-lg shadow-lg p-6 hover:shadow-xl transition-shadow">
+          <div class="flex items-center justify-between">
+            <div>
+              <p class="text-blue-100 text-sm font-medium mb-1">{{ 'dashboard.totalPatients' | translate }}</p>
+              <p class="text-3xl font-bold">{{ statistics.totalPatients }}</p>
+            </div>
+            <div class="bg-blue-400 bg-opacity-30 rounded-full p-4">
+              <mat-icon class="text-3xl">personal_injury</mat-icon>
+            </div>
+          </div>
+        </div>
+
+        <!-- Total Doctors -->
+        <div class="stat-card bg-gradient-to-br from-green-500 to-green-600 text-white rounded-lg shadow-lg p-6 hover:shadow-xl transition-shadow">
+          <div class="flex items-center justify-between">
+            <div>
+              <p class="text-green-100 text-sm font-medium mb-1">{{ 'dashboard.totalDoctors' | translate }}</p>
+              <p class="text-3xl font-bold">{{ statistics.totalDoctors }}</p>
+              <p class="text-green-100 text-xs mt-1">{{ 'dashboard.activeDoctors' | translate }}: {{ statistics.activeDoctors }}</p>
+            </div>
+            <div class="bg-green-400 bg-opacity-30 rounded-full p-4">
+              <mat-icon class="text-3xl">medical_services</mat-icon>
+            </div>
+          </div>
+        </div>
+
+        <!-- Total Visits -->
+        <div class="stat-card bg-gradient-to-br from-purple-500 to-purple-600 text-white rounded-lg shadow-lg p-6 hover:shadow-xl transition-shadow">
+          <div class="flex items-center justify-between">
+            <div>
+              <p class="text-purple-100 text-sm font-medium mb-1">{{ 'dashboard.totalVisits' | translate }}</p>
+              <p class="text-3xl font-bold">{{ statistics.totalVisits }}</p>
+            </div>
+            <div class="bg-purple-400 bg-opacity-30 rounded-full p-4">
+              <mat-icon class="text-3xl">history</mat-icon>
+            </div>
+          </div>
+        </div>
+
+        <!-- Total Exams -->
+        <div class="stat-card bg-gradient-to-br from-orange-500 to-orange-600 text-white rounded-lg shadow-lg p-6 hover:shadow-xl transition-shadow">
+          <div class="flex items-center justify-between">
+            <div>
+              <p class="text-orange-100 text-sm font-medium mb-1">{{ 'dashboard.totalExams' | translate }}</p>
+              <p class="text-3xl font-bold">{{ statistics.totalExams }}</p>
+            </div>
+            <div class="bg-orange-400 bg-opacity-30 rounded-full p-4">
+              <mat-icon class="text-3xl">assignment</mat-icon>
+            </div>
+          </div>
+        </div>
+
+        <!-- Total Appointments -->
+        @if(statistics.totalAppointments !== undefined) {
+          <div class="stat-card bg-gradient-to-br from-pink-500 to-pink-600 text-white rounded-lg shadow-lg p-6 hover:shadow-xl transition-shadow">
+            <div class="flex items-center justify-between">
+              <div>
+                <p class="text-pink-100 text-sm font-medium mb-1">{{ 'dashboard.totalAppointments' | translate }}</p>
+                <p class="text-3xl font-bold">{{ statistics.totalAppointments }}</p>
+                @if(statistics.todayAppointments !== undefined) {
+                  <p class="text-pink-100 text-xs mt-1">{{ 'dashboard.todayAppointments' | translate }}: {{ statistics.todayAppointments }}</p>
+                }
+              </div>
+              <div class="bg-pink-400 bg-opacity-30 rounded-full p-4">
+                <mat-icon class="text-3xl">event</mat-icon>
+              </div>
+            </div>
+          </div>
+        }
+      </div>
+
+      <!-- Insurance Statistics (Admin Only) -->
+      @if(isAdmin() && statistics && (statistics.totalInsuranceCovered || statistics.totalPatientPaid)) {
+        <div class="mb-8">
+          <h3 class="text-2xl font-bold mb-6 text-gray-800">{{ 'dashboard.insuranceStatistics' | translate }}</h3>
+          <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+            <!-- Total Insurance Covered -->
+            <div class="stat-card bg-gradient-to-br from-indigo-500 to-indigo-600 text-white rounded-lg shadow-lg p-6 hover:shadow-xl transition-shadow">
+              <div class="flex items-center justify-between">
+                <div>
+                  <p class="text-indigo-100 text-sm font-medium mb-1">{{ 'dashboard.totalInsuranceCovered' | translate }}</p>
+                  <p class="text-3xl font-bold">{{ statistics.totalInsuranceCovered | number:'1.2-2' }} {{ 'dashboard.currency' | translate }}</p>
+                </div>
+                <div class="bg-indigo-400 bg-opacity-30 rounded-full p-4">
+                  <mat-icon class="text-3xl">business</mat-icon>
+                </div>
+              </div>
+            </div>
+
+            <!-- Total Patient Paid -->
+            <div class="stat-card bg-gradient-to-br from-emerald-500 to-emerald-600 text-white rounded-lg shadow-lg p-6 hover:shadow-xl transition-shadow">
+              <div class="flex items-center justify-between">
+                <div>
+                  <p class="text-emerald-100 text-sm font-medium mb-1">{{ 'dashboard.totalPatientPaid' | translate }}</p>
+                  <p class="text-3xl font-bold">{{ statistics.totalPatientPaid | number:'1.2-2' }} {{ 'dashboard.currency' | translate }}</p>
+                </div>
+                <div class="bg-emerald-400 bg-opacity-30 rounded-full p-4">
+                  <mat-icon class="text-3xl">account_balance_wallet</mat-icon>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
       }
-    </div>
+
+      <!-- Revenue Statistics (Admin Only) -->
+      @if(isAdmin()) {
+        <div class="mb-8">
+          <h3 class="text-2xl font-bold mb-6 text-gray-800">{{ 'dashboard.revenueStatistics' | translate }}</h3>
+          
+          <!-- Revenue Display Box -->
+          <div class="stat-card bg-gradient-to-br from-teal-500 to-teal-600 text-white rounded-lg shadow-lg p-6 mb-6 hover:shadow-xl transition-shadow">
+            <div class="flex items-center justify-between">
+              <div>
+                <p class="text-teal-100 text-sm font-medium mb-1">
+                  @if(revenueFilter === 'total') {
+                    {{ 'dashboard.totalRevenue' | translate }}
+                  } @else if(revenueFilter === 'today') {
+                    {{ 'dashboard.todayRevenue' | translate }}
+                  } @else if(revenueFilter === 'month') {
+                    {{ 'dashboard.thisMonthRevenue' | translate }}
+                  } @else {
+                    {{ 'dashboard.customRangeRevenue' | translate }}
+                  }
+                </p>
+                @if(loadingCustomAmount) {
+                  <div class="flex items-center gap-2">
+                    <mat-icon class="animate-spin text-xl">cached</mat-icon>
+                    <p class="text-3xl font-bold">{{ 'dashboard.loading' | translate }}...</p>
+                  </div>
+                } @else {
+                  <p class="text-3xl font-bold">
+                    {{ getDisplayAmount() | number:'1.2-2' }} {{ 'dashboard.currency' | translate }}
+                  </p>
+                }
+              </div>
+              <div class="bg-teal-400 bg-opacity-30 rounded-full p-4">
+                <mat-icon class="text-3xl">attach_money</mat-icon>
+              </div>
+            </div>
+          </div>
+
+          <!-- Filter Selection and Date Range -->
+          <div class="bg-white rounded-lg shadow-lg p-6">
+            <!-- Filter Selection -->
+            <div class="mb-4">
+              <mat-form-field appearance="outline" class="w-full md:w-64">
+                <mat-label>{{ 'dashboard.selectPeriod' | translate }}</mat-label>
+                <mat-select [(ngModel)]="revenueFilter" (selectionChange)="onRevenueFilterChange()">
+                  <mat-option value="total">{{ 'dashboard.totalRevenue' | translate }}</mat-option>
+                  <mat-option value="today">{{ 'dashboard.todayRevenue' | translate }}</mat-option>
+                  <mat-option value="month">{{ 'dashboard.thisMonthRevenue' | translate }}</mat-option>
+                  <mat-option value="range">{{ 'dashboard.customRange' | translate }}</mat-option>
+                </mat-select>
+              </mat-form-field>
+            </div>
+
+            <!-- Date Range Inputs (shown only when range is selected) -->
+            @if(revenueFilter === 'range') {
+              <div class="grid grid-cols-1 md:grid-cols-3 gap-4 pt-4 border-t border-gray-200">
+                <mat-form-field appearance="outline" class="w-full date-field">
+                  <mat-label>{{ 'dashboard.startDate' | translate }}</mat-label>
+                  <input matInput [matDatepicker]="startPicker" [(ngModel)]="startDate">
+                  <mat-datepicker-toggle matSuffix [for]="startPicker"></mat-datepicker-toggle>
+                  <mat-datepicker #startPicker></mat-datepicker>
+                </mat-form-field>
+                
+                <mat-form-field appearance="outline" class="w-full date-field">
+                  <mat-label>{{ 'dashboard.endDate' | translate }}</mat-label>
+                  <input matInput [matDatepicker]="endPicker" [(ngModel)]="endDate">
+                  <mat-datepicker-toggle matSuffix [for]="endPicker"></mat-datepicker-toggle>
+                  <mat-datepicker #endPicker></mat-datepicker>
+                </mat-form-field>
+                
+                <div class="flex items-stretch date-field">
+                  <button 
+                    mat-raised-button 
+                    color="primary" 
+                    (click)="loadCustomAmount()"
+                    [disabled]="!startDate || !endDate || loadingCustomAmount"
+                    class="w-full calculate-btn">
+                    @if(loadingCustomAmount) {
+                      <mat-icon class="animate-spin mr-2 text-lg">cached</mat-icon>
+                    }
+                    {{ 'dashboard.calculate' | translate }}
+                  </button>
+                </div>
+              </div>
+            }
+          </div>
+        </div>
+      }
+    }
   </div>
 </div>

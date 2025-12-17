@@ -1,53 +1,119 @@
-<div class="row flex justify-between">
-  <div class="col"><h4 class="fw-bold p-3">Ptients Visits</h4></div>
-  <div class="col d-flex flex-column align-items-end">
-    <a
-      class="text-decoration-none"
-      [routerLink]="'/patient-visits/add/' + this.IDnumber"
-      ><h5 class="fw-bold p-3">New Visit</h5></a
-    >
+<div class="flex flex-col pt-8 min-h-screen">
+  <div class="container mx-auto px-4">
+    <!-- Header Section -->
+    <div class="flex flex-col md:flex-row justify-between items-center mb-6">
+      <h1 class="text-3xl font-bold text-gray-800 mb-4 md:mb-0">
+        {{ 'visit.title' | translate }}
+      </h1>
+      <a 
+        [routerLink]="'/patient-visits/add/' + IDnumber"
+        class="inline-flex items-center gap-2 bg-purple-600 hover:bg-purple-700 text-white font-semibold py-2 px-4 rounded-lg shadow-md transition-colors">
+        <mat-icon>add</mat-icon>
+        {{ 'visit.newVisit' | translate }}
+      </a>
+    </div>
+
+    <!-- Visits Grid -->
+    @if(visits.length === 0) {
+      <div class="text-center py-12">
+        <mat-icon class="text-6xl text-gray-400 mb-4">history</mat-icon>
+        <p class="text-xl text-gray-600">{{ 'visit.noVisits' | translate }}</p>
+      </div>
+    } @else {
+      <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+        @for (visit of visits; track visit.id; let i = $index) {
+          <div class="visit-card bg-white rounded-lg shadow-lg hover:shadow-xl transition-all duration-300 overflow-hidden">
+            <!-- Card Header -->
+            <div class="bg-gradient-to-br from-purple-500 to-purple-600 p-6 text-center">
+              <div class="flex items-center justify-center mb-3">
+                <div class="bg-white bg-opacity-20 rounded-full p-3">
+                  <mat-icon class="text-4xl text-white">local_hospital</mat-icon>
+                </div>
+              </div>
+              <h3 class="text-xl font-bold text-white">{{ 'visit.visit' | translate }} #{{ i + 1 }}</h3>
+            </div>
+
+            <!-- Card Body -->
+            <div class="p-6">
+              <!-- Visit Info -->
+              <div class="space-y-3 mb-4">
+                <div class="flex items-center gap-2 text-gray-700">
+                  <mat-icon class="text-purple-500">medical_services</mat-icon>
+                  <div class="flex-1">
+                    <span class="text-xs text-gray-500">{{ 'visit.onDutyDrName' | translate }}</span>
+                    <p class="text-sm font-semibold">{{ visit.onDutyDrName || 'N/A' }}</p>
+                  </div>
+                </div>
+                <div class="flex items-center gap-2 text-gray-700">
+                  <mat-icon class="text-purple-500">calendar_today</mat-icon>
+                  <div class="flex-1">
+                    <span class="text-xs text-gray-500">{{ 'visit.visitDate' | translate }}</span>
+                    <p class="text-sm font-semibold">{{ visit.visitDate | date:'mediumDate' }}</p>
+                  </div>
+                </div>
+                @if(visit.treatmentCost && visit.treatmentCost > 0) {
+                  <div class="flex items-center gap-2 text-gray-700">
+                    <mat-icon class="text-purple-500">attach_money</mat-icon>
+                    <div class="flex-1">
+                      <span class="text-xs text-gray-500">{{ 'visit.treatmentCost' | translate }}</span>
+                      <p class="text-sm font-semibold">{{ visit.treatmentCost | number:'1.2-2' }} {{ 'dashboard.currency' | translate }}</p>
+                    </div>
+                  </div>
+                }
+                @if(visit.insuranceCoveragePercentage && visit.insuranceCoveragePercentage > 0) {
+                  <div class="flex items-center gap-2 text-gray-700">
+                    <mat-icon class="text-purple-500">percent</mat-icon>
+                    <div class="flex-1">
+                      <span class="text-xs text-gray-500">{{ 'visit.insuranceCoveragePercentage' | translate }}</span>
+                      <p class="text-sm font-semibold">{{ visit.insuranceCoveragePercentage }}%</p>
+                    </div>
+                  </div>
+                }
+                @if(visit.insuranceCoveredAmount && visit.insuranceCoveredAmount > 0) {
+                  <div class="flex items-center gap-2 text-gray-700">
+                    <mat-icon class="text-purple-500">business</mat-icon>
+                    <div class="flex-1">
+                      <span class="text-xs text-gray-500">{{ 'visit.insuranceCoveredAmount' | translate }}</span>
+                      <p class="text-sm font-semibold text-blue-600">{{ visit.insuranceCoveredAmount | number:'1.2-2' }} {{ 'dashboard.currency' | translate }}</p>
+                    </div>
+                  </div>
+                }
+                @if(visit.patientPaidAmount && visit.patientPaidAmount > 0) {
+                  <div class="flex items-center gap-2 text-gray-700">
+                    <mat-icon class="text-purple-500">account_balance_wallet</mat-icon>
+                    <div class="flex-1">
+                      <span class="text-xs text-gray-500">{{ 'visit.patientPaidAmount' | translate }}</span>
+                      <p class="text-sm font-semibold text-green-600">{{ visit.patientPaidAmount | number:'1.2-2' }} {{ 'dashboard.currency' | translate }}</p>
+                    </div>
+                  </div>
+                }
+                @if(visit.diagnoses) {
+                  <div class="flex items-start gap-2 text-gray-700">
+                    <mat-icon class="text-purple-500 mt-1">description</mat-icon>
+                    <div class="flex-1">
+                      <span class="text-xs text-gray-500">{{ 'visit.diagnoses' | translate }}</span>
+                      <p class="text-sm line-clamp-2">{{ visit.diagnoses }}</p>
+                    </div>
+                  </div>
+                }
+              </div>
+
+              <mat-divider class="my-4"></mat-divider>
+
+              <!-- Action Button -->
+              <div class="flex justify-center pt-2">
+                <a 
+                  [routerLink]="'/patient-visits/view/' + visit.id" 
+                  class="view-btn w-full"
+                  [title]="'visit.viewVisit' | translate">
+                  <mat-icon>visibility</mat-icon>
+                  <span class="ml-2">{{ 'common.view' | translate }}</span>
+                </a>
+              </div>
+            </div>
+          </div>
+        }
+      </div>
+    }
   </div>
-</div>
-<div class="flex flex-col items-center pt-10">
-  <table class="table w-[95%] items-center justify-center border">
-    <thead>
-      <tr align="left">
-        <th scope="col" align="center" class="p-2 border fw-normal">#</th>
-        <th scope="col" class="p-2 border fw-normal">On Duty Dr. Name</th>
-        <th scope="col" class="p-2 border fw-normal">Visit Date</th>
-        <th scope="col" class="p-2 border fw-normal">Actions</th>
-      </tr>
-    </thead>
-    <tbody>
-      <tr *ngFor="let visit of visits; index as i">
-        <th scope="row" class="text-xs border p-2">{{ i + 1 }}</th>
-        <th scope="row" class="text-xs border p-2">{{ visit.onDutyDrName }}</th>
-        <th scope="row" class="text-xs border p-2">
-          {{ visit.visitDate | date }}
-        </th>
-        <th scope="row" class="text-xs border p-2">
-          <a
-            [routerLink]="'/patient-visits/view/' + visit.id"
-            class="card-link p-3"
-          >
-            <svg
-              xmlns="http://www.w3.org/2000/svg"
-              width="16"
-              height="16"
-              fill="currentColor"
-              class="bi bi-eye"
-              viewBox="0 0 16 16"
-            >
-              <path
-                d="M16 8s-3-5.5-8-5.5S0 8 0 8s3 5.5 8 5.5S16 8 16 8M1.173 8a13 13 0 0 1 1.66-2.043C4.12 4.668 5.88 3.5 8 3.5s3.879 1.168 5.168 2.457A13 13 0 0 1 14.828 8q-.086.13-.195.288c-.335.48-.83 1.12-1.465 1.755C11.879 11.332 10.119 12.5 8 12.5s-3.879-1.168-5.168-2.457A13 13 0 0 1 1.172 8z"
-              />
-              <path
-                d="M8 5.5a2.5 2.5 0 1 0 0 5 2.5 2.5 0 0 0 0-5M4.5 8a3.5 3.5 0 1 1 7 0 3.5 3.5 0 0 1-7 0"
-              />
-            </svg>
-          </a>
-        </th>
-      </tr>
-    </tbody>
-  </table>
 </div>

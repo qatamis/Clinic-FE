@@ -8,10 +8,12 @@ import { PatientsService } from '../../services/patients.service';
 import { MatIconModule } from '@angular/material/icon';
 import { MatInputModule } from '@angular/material/input';
 import { MatDividerModule } from '@angular/material/divider';
+import { MatFormFieldModule } from '@angular/material/form-field';
+import { TranslateModule } from '@ngx-translate/core';
 
 @Component({
   selector: 'app-patients',
-  imports: [CommonModule, AsyncPipe, RouterLink, MatInputModule, MatIconModule, MatDividerModule],
+  imports: [CommonModule, AsyncPipe, RouterLink, MatInputModule, MatIconModule, MatDividerModule, MatFormFieldModule, TranslateModule],
   templateUrl: './patients.component.html',
   styleUrl: './patients.component.css'
 })

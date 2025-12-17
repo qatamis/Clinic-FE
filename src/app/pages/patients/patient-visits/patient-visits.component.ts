@@ -1,7 +1,10 @@
-import { CommonModule } from '@angular/common';
+import { CommonModule, DatePipe } from '@angular/common';
 import { Component, inject, OnInit } from '@angular/core';
 import { FormGroup, FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { ActivatedRoute, Router, RouterLink } from '@angular/router';
+import { MatIconModule } from '@angular/material/icon';
+import { MatDividerModule } from '@angular/material/divider';
+import { TranslateModule } from '@ngx-translate/core';
 import { PatientVisits } from '../../../interfaces/patient-visits';
 import { PatientVisitsService } from '../../../services/patient-visits.service';
 
@@ -12,6 +15,10 @@ import { PatientVisitsService } from '../../../services/patient-visits.service';
     CommonModule,
     RouterLink,
     FormsModule,
+    MatIconModule,
+    MatDividerModule,
+    DatePipe,
+    TranslateModule,
   ],
   templateUrl: './patient-visits.component.html',
   styleUrl: './patient-visits.component.css'
